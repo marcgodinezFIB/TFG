@@ -69,8 +69,19 @@
                 </div>
                 <div class="row mt-3">
                   <div class="col-6" style="text-align: end">
-                    <b-button variant="outline-secondary" @click="NextStep1"
-                      >Guardar y continuar</b-button
+                    <b-button-group
+                      ><b-button
+                        size="sm"
+                        variant="outline-secondary"
+                        @click="EditStep1"
+                        >Editar</b-button
+                      >
+                      <b-button
+                        size="sm"
+                        variant="outline-secondary"
+                        @click="NextStep1"
+                        >Guardar y continuar</b-button
+                      ></b-button-group
                     >
                   </div>
                 </div>
@@ -178,7 +189,7 @@
                     </select>
                   </div>
                   <div class="col-3">
-                    <b-button variant="outline-secondary" @click="addAnimal"
+                    <b-button size="sm" variant="outline-secondary" @click="addAnimal"
                       >Add</b-button
                     >
                   </div>
@@ -251,7 +262,7 @@
                     </select>
                   </div>
                   <div class="col-3">
-                    <b-button variant="outline-secondary" @click="addVegetal"
+                    <b-button size="sm" variant="outline-secondary" @click="addVegetal"
                       >Add</b-button
                     >
                   </div>
@@ -328,8 +339,8 @@
                         <td>{{ item.selectedAnimal.name }}</td>
                         <td>{{ item.quantityAnimal }}</td>
                         <td>
-                          <b-button
-                            variant="outline-secondary"
+                          <b-button size="sm"
+                            variant="outline-danger"
                             @click="deleteAnimal(index)"
                             >Eliminar</b-button
                           >
@@ -354,8 +365,8 @@
                         <td>{{ item.fertilizerVegetal }}</td>
                         <td>{{ item.pesticideVegetal }}</td>
                         <td>
-                          <b-button
-                            variant="outline-secondary"
+                          <b-button size="sm"
+                            variant="outline-danger"
                             @click="deleteVegetal(index)"
                             >Eliminar</b-button
                           >
@@ -367,8 +378,19 @@
               </div>
               <div class="row mt-3">
                 <div class="col-6" style="text-align: end">
-                  <b-button variant="outline-secondary" @click="NextStep2"
-                    >Guardar y continuar</b-button
+                  <b-button-group
+                    ><b-button
+                      size="sm"
+                      variant="outline-secondary"
+                      @click="EditStep2"
+                      >Editar</b-button
+                    >
+                    <b-button
+                      size="sm"
+                      variant="outline-secondary"
+                      @click="NextStep2"
+                      >Guardar y continuar</b-button
+                    ></b-button-group
                   >
                 </div>
               </div>
@@ -434,7 +456,10 @@
                 </div>
                 <div class="row" style="text-align: end">
                   <div class="col">
-                    <b-button variant="outline-secondary" :disabled="isDisabledTransport" @click="addTransport"
+                    <b-button size="sm"
+                      variant="outline-secondary"
+                      :disabled="isDisabledTransport"
+                      @click="addTransport"
                       >Add</b-button
                     >
                   </div>
@@ -465,8 +490,8 @@
                         <td>{{ item.distance }}</td>
                         <td>{{ item.capacity }}</td>
                         <td>
-                          <b-button
-                            variant="outline-secondary"
+                          <b-button size="sm"
+                            variant="outline-danger"
                             @click="deleteTransport(index)"
                             >Eliminar</b-button
                           >
@@ -478,9 +503,20 @@
               </div>
             </div>
             <div class="row mt-3">
-              <div class="col" style="text-align: end">
-                <b-button variant="outline-secondary" @click="NextStep3"
-                  >Guardar y continuar</b-button
+              <div class="col-6" style="text-align: end">
+                <b-button-group
+                  ><b-button
+                    size="sm"
+                    variant="outline-secondary"
+                    @click="EditStep3"
+                    >Editar</b-button
+                  >
+                  <b-button
+                    size="sm"
+                    variant="outline-secondary"
+                    @click="NextStep3"
+                    >Guardar y continuar</b-button
+                  ></b-button-group
                 >
               </div>
             </div>
@@ -525,7 +561,7 @@
                 </div>
                 <div class="row">
                   <div class="col">
-                    <b-button variant="outline-secondary" @click="addRecipient"
+                    <b-button size="sm" variant="outline-secondary" @click="addRecipient"
                       >Add</b-button
                     >
                   </div>
@@ -546,8 +582,8 @@
                         <td>{{ item.selectedRecipient.name }}</td>
                         <td>{{ item.dimensionsRecipient }}</td>
                         <td>
-                          <b-button
-                            variant="outline-secondary"
+                          <b-button size="sm"
+                            variant="outline-danger"
                             @click="deleteRecipient(index)"
                             >Eliminar</b-button
                           >
@@ -570,8 +606,19 @@
             </div>
             <div class="row mt-3">
               <div class="col-6" style="text-align: end">
-                <b-button variant="outline-secondary" @click="NextStep4"
-                  >Guardar y continuar</b-button
+                <b-button-group
+                  ><b-button
+                    size="sm"
+                    variant="outline-secondary"
+                    @click="EditStep4"
+                    >Editar</b-button
+                  >
+                  <b-button
+                    size="sm"
+                    variant="outline-secondary"
+                    @click="NextStep4"
+                    >Guardar y continuar</b-button
+                  ></b-button-group
                 >
               </div>
             </div>
@@ -664,8 +711,8 @@
                         <td>{{ item.distance }}</td>
                         <td>{{ item.capacity }}</td>
                         <td>
-                          <b-button
-                            variant="outline-secondary"
+                          <b-button size="sm"
+                            variant="outline-danger"
                             @click="deleteTransport(index)"
                             >Eliminar</b-button
                           >
@@ -693,8 +740,8 @@
                         <td>{{ item.selectedRecipient.name }}</td>
                         <td>{{ item.dimensionsRecipient }}</td>
                         <td>
-                          <b-button
-                            variant="outline-secondary"
+                          <b-button size="sm"
+                            variant="outline-danger"
                             @click="deleteRecipient(index)"
                             >Eliminar</b-button
                           >
@@ -752,8 +799,8 @@
                       <td>{{ item.selectedAnimal.name }}</td>
                       <td>{{ item.quantityAnimal }}</td>
                       <td>
-                        <b-button
-                          variant="outline-secondary"
+                        <b-button size="sm"
+                          variant="outline-danger"
                           @click="deleteAnimal(index)"
                           >Eliminar</b-button
                         >
@@ -775,8 +822,8 @@
                       <td>{{ item.fertilizerVegetal }}</td>
                       <td>{{ item.pesticideVegetal }}</td>
                       <td>
-                        <b-button
-                          variant="outline-secondary"
+                        <b-button size="sm"
+                          variant="outline-danger"
                           @click="deleteVegetal(index)"
                           >Eliminar</b-button
                         >
@@ -786,8 +833,8 @@
                 </table>
               </div>
             </div>
-            <div>
-              <b-button variant="outline-secondary" @click="addNewProduct"
+            <div >
+              <b-button variant="outline-secondary" size="sm" style="text-align: end;" @click="addNewProduct"
                 >Guardar producto</b-button
               >
             </div>
@@ -898,6 +945,9 @@ export default {
         this.step = this.step + 1;
       }
     },
+    EditStep1() {
+      this.isDisabled = false;
+    },
     NextStep2() {
       this.checkProcurementInfo();
       if (this.mensajeProcurement == "") {
@@ -906,11 +956,17 @@ export default {
         this.step = this.step + 1;
       }
     },
+    EditStep2() {
+      this.isDisabledProcurement = false;
+    },
     NextStep3() {
-        this.isDisabledTransport = true;
-        this.disabledTab4 = false;
-        this.step = this.step + 1;
-        this.mensajeTransport = ""
+      this.isDisabledTransport = true;
+      this.disabledTab4 = false;
+      this.step = this.step + 1;
+      this.mensajeTransport = "";
+    },
+    EditStep3() {
+      this.isDisabledTransport = false;
     },
     NextStep4() {
       this.step = this.step + 1;
