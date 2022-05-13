@@ -4,7 +4,7 @@
     <b-row>
       <b-col lg="6" class="my-1">
         <b-form-group
-          label="Sort"
+          label="Ordenar por campo"
           label-for="sort-by-select"
           label-cols-sm="3"
           label-align-sm="right"
@@ -32,15 +32,15 @@
               size="sm"
               class="w-25"
             >
-              <option :value="false">Asc</option>
-              <option :value="true">Desc</option>
+              <option :value="false">Ascendiente</option>
+              <option :value="true">Descendiente</option>
             </b-form-select>
           </b-input-group>
         </b-form-group>
       </b-col>
       <b-col lg="6" class="my-1">
         <b-form-group
-          label="Filter"
+          label="Filtrar"
           label-for="filter-input"
           label-cols-sm="3"
           label-align-sm="right"
@@ -52,12 +52,12 @@
               id="filter-input"
               v-model="filter"
               type="search"
-              placeholder="Type to Search"
+              placeholder="Escribe para buscar"
             ></b-form-input>
 
             <b-input-group-append>
               <b-button size="sm" variant="outline-secondary" :disabled="!filter" @click="filter = ''"
-                >Clear</b-button
+                >Limpiar</b-button
               >
             </b-input-group-append>
           </b-input-group>
@@ -79,21 +79,29 @@
       small
       @filtered="onFiltered"
     >
+    
       <template #cell(actions)="row">
-        <b-button-group
-          ><b-button
+        <b-button-group>
+          <b-button
             variant="outline-secondary"
             size="sm"
-            @click="info(row.item, $event.target)"
+            @click="viewProduct(row.item, row.index)"
           >
-            Info product
+            Ver producto
+          </b-button>
+          <b-button
+            variant="outline-secondary"
+            size="sm"
+            @click="editProduct(row.item, row.index)"
+          >
+            Editar producto
           </b-button>
           <b-button
             variant="outline-danger"
             size="sm"
             @click="deleteProduct(row.item, row.index)"
           >
-            Delete product
+            Eliminar producto
           </b-button></b-button-group
         >
       </template>
@@ -117,76 +125,70 @@ export default {
       fields: [
         {
           key: "name",
-          label: "name",
+          label: "Nombre",
           sortable: true,
           sortDirection: "desc",
           class: "text-center",
         },
         {
           key: "description",
-          label: "Description",
+          label: "Descripción",
           sortable: true,
           class: "text-center",
         },
         {
           key: "origin",
-          label: "Origin",
+          label: "Origen",
           sortable: true,
           class: "text-center",
         },
         {
-          key: "CO2Animal",
-          label: "CO2Animal",
-          sortable: true,
-          class: "text-center",
-        },
-        {
-          key: "CO2Vegetal",
-          label: "CO2Vegetal",
+          key: "CO2Food",
+          label: "gCO2 por alimentos",
           sortable: true,
           class: "text-center",
         },
         {
           key: "CO2Water",
-          label: "CO2Water",
+          label: "gCO2 por agua",
           sortable: true,
           class: "text-center",
         },
         {
           key: "CO2Electricity",
-          label: "CO2Electricity",
+          label: "gCO2 por electricidad",
           sortable: true,
           class: "text-center",
         },
         {
           key: "CO2Procurement",
-          label: "CO2Procurement",
+          label: "gCO2 por producción",
           sortable: true,
           class: "text-center",
         },
         {
           key: "CO2Transport",
-          label: "CO2Transport",
+          label: "gCO2 por transportes",
           sortable: true,
           class: "text-center",
         },
         {
           key: "CO2Recipient",
-          label: "CO2Recipient",
+          label: "gCO2 por envases",
           sortable: true,
           class: "text-center",
         },
         {
           key: "CO2Total",
-          label: "CO2Total",
+          label: "gCO2 total",
           sortable: true,
           class: "text-center",
         },
-        { key: "actions", label: "Actions" },
+        { key: "actions", label: "" },
       ],
       totalRows: 1,
       currentPage: 1,
-      perPage: 5,
+      perPage: 25,
       pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
       sortBy: "",
       sortDesc: false,
@@ -251,6 +253,12 @@ export default {
         this.items.splice(index, 1);
       }
     },
+        editProduct(item, index) {
+      this.$router.push({path : '/AddProduct?id=' + item._id})
+    },
+    viewProduct(item, index) {
+      this.$router.push({path : '/ViewProduct?id=' + item._id})
+    }
   },
 };
 </script>

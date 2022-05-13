@@ -5,6 +5,9 @@ const api = express.Router();
 const UserCtrl = require('../controllers/user');
 const ProductCtrl = require('../controllers/product');
 const TypeProdCtrl = require('../controllers/typeprod');
+const FoodCtrl = require('../controllers/food');
+const FoodInstanceCtrl = require('../controllers/foodInstance');
+
 
 const AnimalCtrl = require('../controllers/animal');
 const AnimalInstanceCtrl = require('../controllers/animalInstance');
@@ -18,6 +21,9 @@ const RecipientInstanceCtrl = require('../controllers/recipientInstance');
 const TransportCtrl = require('../controllers/transport');
 const TransportInstanceCtrl = require('../controllers/transportInstance');
 
+const FavoriteProductCtrl = require('../controllers/favoriteproduct');
+const RecentProductCtrl = require('../controllers/recentproduct');
+
 const auth = require('../middlewares/auth');
 
 api.post('/signup', UserCtrl.signUp);
@@ -29,12 +35,28 @@ api.post('/addproduct', auth, ProductCtrl.addProduct);
 api.get('/getallproducts', ProductCtrl.getAllProducts);
 api.get('/getproduct/:id', ProductCtrl.getProduct);
 api.delete('/removeproduct/:id', auth, ProductCtrl.removeProduct);
+api.get('/getallproducts/:prod', ProductCtrl.getAllProductsByProdType);
+
 
 api.post('/addtypeprod', auth, TypeProdCtrl.addTypeProd);
 api.get('/getalltypeprod', TypeProdCtrl.getAllTypeProd);
 api.get('/gettypeprod/:id', TypeProdCtrl.getTypeProd);
 api.delete('/removetypeprod/:id', auth, TypeProdCtrl.removeTypeProd);
 api.get('/getalltypeprods', TypeProdCtrl.getAllTypeProd);
+
+
+api.post('/addfood', auth, FoodCtrl.addFood);
+api.get('/getallfood', FoodCtrl.getAllFoods);
+api.get('/getfood/:id', FoodCtrl.getFood);
+api.delete('/removefood/:id', auth, FoodCtrl.removeFood);
+api.get('/getallfoods', FoodCtrl.getAllFoods);
+api.get('/getAllFoodsByTypeProd/:typeFood', FoodCtrl.getAllFoodsByTypeProd);
+
+api.post('/addFoodInstance', auth, FoodInstanceCtrl.addFoodInstance);
+api.get('/getallFoodInstance', FoodInstanceCtrl.getAllFoodInstances);
+api.get('/getFoodInstance/:id', FoodInstanceCtrl.getFoodInstance);
+api.delete('/removeFoodInstance/:id', auth, FoodInstanceCtrl.removeFoodInstance);
+api.get('/getallFoodsInstances', FoodInstanceCtrl.getAllFoodInstances);
 
 api.post('/addAnimal', auth, AnimalCtrl.addAnimal);
 api.get('/getallAnimal', AnimalCtrl.getAllAnimals);
@@ -47,6 +69,18 @@ api.get('/getallAnimalInstance', AnimalInstanceCtrl.getAllAnimalInstances);
 api.get('/getAnimalInstance/:id', AnimalInstanceCtrl.getAnimalInstance);
 api.delete('/removeAnimalInstance/:id', auth, AnimalInstanceCtrl.removeAnimalInstance);
 api.get('/getallAnimalsInstances', AnimalInstanceCtrl.getAllAnimalInstances);
+
+api.post('/addFavoriteProduct/', auth, FavoriteProductCtrl.addFavoriteProduct);
+api.get('/getallFavoriteProduct', FavoriteProductCtrl.getAllFavoriteProducts);
+api.get('/getFavoriteProduct/:user', FavoriteProductCtrl.getFavoriteProduct);
+api.delete('/removeFavoriteProduct/:prod/', auth, FavoriteProductCtrl.removeFavoriteProduct);
+api.get('/getallFavoriteProducts/:user', FavoriteProductCtrl.getAllFavoriteProducts);
+
+api.post('/addRecentProduct/', auth, RecentProductCtrl.addRecentProduct);
+api.get('/getallRecentProduct', RecentProductCtrl.getAllRecentProducts);
+api.get('/getRecentProduct/:user', RecentProductCtrl.getRecentProduct);
+api.delete('/removeRecentProduct/:prod/', auth, RecentProductCtrl.removeRecentProduct);
+api.get('/getallRecentProducts/:user', RecentProductCtrl.getAllRecentProducts);
 
 api.post('/addVegetal', auth, VegetalCtrl.addVegetal);
 api.get('/getallVegetal', VegetalCtrl.getAllVegetals);

@@ -12,22 +12,19 @@ function addProduct(req, res) {
         if (err) return res.status(500).send({ message: err })
         if (!user) return res.status(404).send({ message: "no existe usuario" })
         if (user.role == "EMPRESA") {
-            console.log(req.body)
+            //console.log(req.body)
+            //console.log(req.body.image)
             // req.body.animalsList.foreach(animal => animals.push(animal._id));
             // req.body.vegetalsList.foreach(vegetal => vegetals.push(vegetal._id));
             // req.body.transportsList.foreach(transport => transports.push(transport._id));
             // req.body.recipientsList.foreach(recipient => recipients.push(recipient._id));
-            console.log(req.body.animals)
-            var CO2Animal = 0;
-            var CO2Vegetal = 0;
+            var CO2Food = 0;
             var CO2Transport = 0;
             var CO2Recipient = 0;
-            req.body.animals.forEach(element => {
-                CO2Animal += (element.animal.CO2PerYear * element.animal.years * element.quantity) / element.animal.weight
+            req.body.foods.forEach(element => {
+                CO2Food += (element.food.CO2PerKg * element.quantity)
             })
-            req.body.vegetals.forEach(element => {
-                CO2Vegetal += (element.pesticide * 0.12) + (element.fertilizer * 0.24) 
-            })
+
             req.body.transports.forEach(element => {
                 CO2Transport += element.distance * element.transport.CO2PerKm
             })
@@ -39,12 +36,13 @@ function addProduct(req, res) {
                 name: req.body.name,
                 description: req.body.description,
                 origin: req.body.origin,
-                typeProd: req.body.typeProd,
+                type : req.body.typeProd,
+                // avatar: req.body.avatar,
                 //Procurement
                 water: req.body.water, //valor fijo
                 electricity: req.body.electricity, //valor fijo
-                animal: req.body.animals,
-                vegetal: req.body.vegetals,
+                foods:req.body.foods,
+                
                 //Transport
                 transport: req.body.transports,
                 //Waste
@@ -54,13 +52,13 @@ function addProduct(req, res) {
                 //CO2 cost L water
                 CO2Water:  (req.body.water * 0.000298).toFixed(4), // 0.298 gramos por litro
                 CO2Electricity: (req.body.electricity * 0.167).toFixed(4), // gramos por kwh
-                CO2Animal: CO2Animal.toFixed(4),
-                CO2Vegetal: CO2Vegetal.toFixed(4),
-                CO2Procurement: (req.body.water * 0.000298 + req.body.electricity * 0.167 + CO2Animal + CO2Vegetal).toFixed(4),
+                CO2Food: CO2Food.toFixed(4),
+                CO2Procurement: (req.body.water * 0.000298 + req.body.electricity * 0.167 + CO2Food).toFixed(4),
                 CO2Transport: CO2Transport.toFixed(4),
                 CO2Recipient: CO2Recipient.toFixed(4),
-                CO2Total: (req.body.water * 0.000298 + req.body.electricity * 0.167 + CO2Animal + CO2Vegetal + CO2Transport + CO2Recipient).toFixed(4)
+                CO2Total: (req.body.water * 0.000298 + req.body.electricity * 0.167 + CO2Food + CO2Transport + CO2Recipient).toFixed(4)
             })
+            console.log(product)
             product.save();
             return res.status(201).send({ message: "Se ha añadido correctamente el producto" })
         } else return res.status(403).send({ message: "No eres administrador" })
@@ -82,11 +80,18 @@ function removeProduct(req, res) {
 }
 
 function getProduct(req, res) {
+    console.log(req)
     Product.findById(req.params.id, (err, product) => {
         if (err) return res.status(500).send({ message: err })
         if (!product) return res.status(404).send({ message: "no existe producto" })
         if (product) return res.status(200).send({ product })
     })
+}
+function getProductAux(product) {
+    console.log(product)
+    Product.findById(product, (err, product) => {
+        return product;
+      })
 }
 
 function getAllProducts(req, res) {
@@ -97,7 +102,14 @@ function getAllProducts(req, res) {
     })
 
 }
+function getAllProductsByProdType(req, res) {
+    Product.find({type : req.params.prod}, (err, prods) => {
+        if (err) return res.status(500).send({ message: err })
+        if (!prods) return res.status(404).send({ message: "no existen productos" })
+        if (prods) return res.status(200).send({ message: prods })
+    })
 
+}
 function isAType(type) {
     let typeProds = {
         values: ["Leche y derivados", "Carnes, Pescado y huevos", "Patatas, legumbres, frutos secos", "Verduras y hortalizas", "Frutas", "Cereales y derivados, azúcar y dulces", "Grasas, aceite y mantequilla"],
@@ -113,6 +125,8 @@ module.exports = {
     addProduct,
     removeProduct,
     getProduct,
+    getProductAux,
     getAllProducts,
     isAType,
+    getAllProductsByProdType,
 }

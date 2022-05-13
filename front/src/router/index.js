@@ -43,17 +43,41 @@ const routes = new VueRouter({
             import ('../components/ProductList.vue')
     },
     {
+        path: '/foods',
+        name: 'Foods',
+        component: () =>
+            import ('../components/AdminTools/Food.vue')
+    },
+    {
+        path: '/recipients',
+        name: 'Recipients',
+        component: () =>
+            import ('../components/AdminTools/Recipient.vue')
+    },
+    {
+        path: '/transports',
+        name: 'Transports',
+        component: () =>
+            import ('../components/AdminTools/Transport.vue')
+    },
+    {
+        path: '/typeprods',
+        name: 'TypeProds',
+        component: () =>
+            import ('../components/AdminTools/TypeProd.vue')
+    },
+    {
+        path: '/viewproduct',
+        name: 'ViewProduct',
+        component: () =>
+            import ('../components/ViewProduct.vue')
+    },
+    {
         path: '/createtransport',
         name: 'CreateTransport',
         component: () =>
             import ('../components/AdminTools/CreateTransport.vue')
     },
-    {
-        path: '/admintools',
-        name: 'AdminTools',
-        component: () =>
-            import ('../components/AdminTools.vue')
-    }
 ]});
 
 export default routes
