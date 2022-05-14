@@ -5,15 +5,52 @@
         <b-tab title="Información general" :active="step === 1">
           <b-card-text>
             <div class="row">
-              <div class="col-3"></div>
-              <div class="col">
+              <div class="col-4" v-if="this.$route.query.id != null">
                 <div class="row">
-                  <div class="col-3">
+                  <div class="col-2">
+                    <img v-if="this.image != null" style="width:200px; height:150px" id= "loadImage" v-bind:src="'http://localhost:3000/uploads/' + this.image">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <label>Imagen del producto:</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <input type="file" id ="image" @change="uploadFile">
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col">
+                    <b-button-group
+                      ><b-button
+                    variant="outline-secondary"
+                    size="sm"
+                    style="text-align: end"
+                    @click="attachImage"
+                    >Guardar imagen</b-button
+                  >
+                      <b-button
+                        size="sm"
+                        variant="outline-danger"
+                        @click="deleteImage"
+                        >Eliminar imagen</b-button
+                      ></b-button-group
+                    >
+                    
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-4">
+                <div class="row">
+                  <div class="col">
                     <label>Nombre:</label>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-6">
+                  <div class="col">
                     <b-form-input
                       trim
                       type="text"
@@ -24,13 +61,13 @@
                     />
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-3">
+                <div class="row mt-4">
+                  <div class="col">
                     <label>Descripción:</label>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-6">
+                  <div class="col">
                     <b-form-input
                       trim
                       type="text"
@@ -42,12 +79,32 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-3">
+                  <div class="col">
+                    <label>Agua: (en L)</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                     <b-form-input
+                      trim
+                      type="number"
+                      required
+                      :disabled="isDisabled"
+                      value=""
+                      v-model="Water"
+                      class="form-control my-2"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="row">
+                  <div class="col">
                     <label>Origen:</label>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-6">
+                  <div class="col">
                     <b-form-input
                       trim
                       type="text"
@@ -58,10 +115,12 @@
                     />
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-3">
-                    <div class="row"><label>Cantidad:</label></div>
-                    <div class="row"><a>(en Kg)</a></div>
+                <div class="row mt-4">
+                  <div class="col-6">
+                    <div class="row"><label>Cantidad: (en Kg)</label></div>
+                  </div>
+                  <div class="col-6">
+                    <label>Tipo de producto:</label>
                   </div>
                 </div>
                 <div class="row">
@@ -75,42 +134,45 @@
                       :disabled="isDisabled"
                     />
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-3">
-                    <label>Imagen del producto:</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-3">
-                    <input type="file" id ="productImg">
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-3">
-                    <label>Tipo de producto:</label>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-3">
-                    <select
+                  <div class="col">
+                    <div class="mt-2">
+                    <div>
+                    <select class="form-select"
                       v-model="productType"
                       @change="changeFoodType(productType.name)"
                     >
                       <option
                         v-for="(foodtype, _id) in listFoodTypes"
                         :value="foodtype"
-                        :disabled="isDisabledProcurement"
+                        :disabled="isDisabled"
                         :key="_id"
                       >
                         {{ foodtype.name }}
                       </option>
                     </select>
+                    </div>
                   </div>
                 </div>
-                
-                <div class="row mt-3">
-                  <div class="col-6" style="text-align: end">
+                <div class="row">
+                  <div class="col">
+                    <label>Electricidad: (en kWh)</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                     <b-form-input
+                      trim
+                      type="number"
+                      required
+                      :disabled="isDisabled"
+                      value=""
+                      v-model="Electricity"
+                      class="form-control my-2"
+                    />
+                  </div>
+                </div>
+                <div class="row mt-4">
+                  <div class="col" style="text-align: end">
                     <b-button-group
                       ><b-button
                         size="sm"
@@ -127,8 +189,11 @@
                     >
                   </div>
                 </div>
-                <div class="row mt-3">
-                  <div class="col-6">
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+                  <div class="col">
                     <b-alert
                       v-if="mensajeGeneralInfo != ''"
                       show
@@ -137,10 +202,8 @@
                     >
                   </div>
                 </div>
-              </div>
-            </div>
-          </b-card-text>
-        </b-tab>
+        </b-card-text>
+      </b-tab>
         <b-tab title="Producción" :disabled="disabledTab2" :active="step === 2">
           <b-card-text>
             <div class="row">
@@ -766,7 +829,7 @@ export default {
       productOrigin: "",
       productType: "",
       productQuantity: "",
-      //image: "",
+      image: null,
 
       Water: "",
       Electricity: "",
@@ -808,6 +871,7 @@ export default {
       this.$router.push("/login");
     }
     this.loadProduct();
+    this.getImage();
   },
   mounted() {
     this.getAllTypesProd();
@@ -818,6 +882,15 @@ export default {
     this.getAllFoods();
   },
   methods: {
+    uploadFile(event){
+      this.image = event.target.files[0];
+
+    },
+    getImage(){
+      if(this.image == null){
+        document.getElementById("image").hidden = true;
+      }
+    },
     // onFileChange(item, e) {
     //   var files = e.target.files || e.dataTransfer.files;
     //   if (!files.length) return;
@@ -832,6 +905,24 @@ export default {
     //   };
     //   reader.readAsDataURL(file);
     // },
+    attachImage(){
+      if(this.$route.query.id != null){
+        const formData = new FormData();
+        formData.append('image', this.image,this.image.name);
+        axios
+        .post("/attachimage/" + this.$route.query.id, formData,
+          {headers: {
+            authorization: "Bearer " + localStorage.getItem("token"),
+          }}).then(
+          (res) => {
+            this.error = "";
+          },
+          (err) => {
+            this.error = err.response.data.error;
+          }
+        );
+      }
+    },
     loadProduct() {
       if (this.$route.query.id != null) {
         axios.get("getProduct/" + this.$route.query.id).then((res) => {
@@ -839,7 +930,6 @@ export default {
           this.disabledTab3 = false;
           this.disabledTab4 = false;
           this.disabledTab5 = false;
-
           //hide save buttons if not edit
           this.NextStep1()
           //GeneralInfo
@@ -849,7 +939,7 @@ export default {
           this.productOrigin = res.data.product.origin;
           this.productType = res.data.product.typeProd;
           this.productQuantity = res.data.product.quantity;
-
+          this.image = res.data.product.image
           //Produccion
           this.isDisabledProcurement = true;
           this.Water = res.data.product.water;
@@ -1134,16 +1224,17 @@ export default {
         );
     },
     addNewProduct() {
-      // const formData = new FormData();
-      // formData.append("file", this.image);
+      //const formData = new FormData();
+      //formData.append('image', this.image,this.image.name);
+      //console.log(formData);
       let newProduct = {
         //General info
         name: this.productName,
         description: this.productDescription,
         origin: this.productOrigin,
-        productQuantity: this.productQuantity,
-        typeProd: this.productType.name, //o Id?
-        //image: formData,
+        quantity: this.productQuantity,
+        type: this.productType.name, //o Id?
+        image: '',
         //Procurement
         water: this.Water,
         electricity: this.Electricity,
@@ -1157,10 +1248,11 @@ export default {
       };
       axios
         .post("/addProduct", newProduct, {
-          headers: { authorization: "Bearer " + localStorage.getItem("token") },
+          headers: { authorization: "Bearer " + localStorage.getItem("token")},
         })
         .then(
           (res) => {
+            console.log(res);
             this.error = "";
             this.mensaje = "Producto creado";
             this.$router.push("/productlist");

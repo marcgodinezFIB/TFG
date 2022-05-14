@@ -9,6 +9,7 @@ const ProductSchema = new Schema({
     description: { type: String, required: [true] },
     origin: { type: String, required: [true]},
     type: { type: String},
+    image: {type : String},
     water: { type: Number},
     electricity:{ type: Number},
     foods: {type : Array},

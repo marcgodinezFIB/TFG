@@ -23,6 +23,18 @@ const TransportInstanceCtrl = require('../controllers/transportInstance');
 
 const FavoriteProductCtrl = require('../controllers/favoriteproduct');
 const RecentProductCtrl = require('../controllers/recentproduct');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, '../api/uploads/');
+    },
+    filename: function(req, file, cb){
+        cb(null,Date.now() + file.originalname);
+    }
+});
+
+const upload = multer({storage: storage});
 
 const auth = require('../middlewares/auth');
 
@@ -31,11 +43,19 @@ api.post('/login', UserCtrl.signIn);
 api.get('/profile', auth, UserCtrl.showUser);
 api.post('/signinadmin', UserCtrl.signInAdmin);
 
-api.post('/addproduct', auth, ProductCtrl.addProduct);
+api.post('/addproduct', auth, upload.single("image"), ProductCtrl.addProduct);
 api.get('/getallproducts', ProductCtrl.getAllProducts);
 api.get('/getproduct/:id', ProductCtrl.getProduct);
 api.delete('/removeproduct/:id', auth, ProductCtrl.removeProduct);
 api.get('/getallproducts/:prod', ProductCtrl.getAllProductsByProdType);
+api.post('/attachimage/:prod', auth, upload.single("image"), ProductCtrl.attachImage);
+
+api.post('/saveimage', auth, upload.single("image"), function (req,res){
+    console.log(req.file);
+    return res.status(200).send({message : "Imagen subida"})
+});
+
+api.get('/getimage/:prod', auth, ProductCtrl.getImage);
 
 
 api.post('/addtypeprod', auth, TypeProdCtrl.addTypeProd);

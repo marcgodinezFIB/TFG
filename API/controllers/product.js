@@ -6,14 +6,20 @@ const User = require('../models/user')
 const cities = require('cities')
 const cities2 = require('all-the-cities');
 
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'})
+
+
 function addProduct(req, res) {
+    //req.body.productImage = upload.single('productImage')
     //var animals = vegetals = transports = recipients = [];
+    //console.log(req.body);
+    console.log(req.body);
+    console.log(req.params);
     User.findById(req.user, (err, user) => {
         if (err) return res.status(500).send({ message: err })
         if (!user) return res.status(404).send({ message: "no existe usuario" })
         if (user.role == "EMPRESA") {
-            //console.log(req.body)
-            //console.log(req.body.image)
             // req.body.animalsList.foreach(animal => animals.push(animal._id));
             // req.body.vegetalsList.foreach(vegetal => vegetals.push(vegetal._id));
             // req.body.transportsList.foreach(transport => transports.push(transport._id));
@@ -36,7 +42,9 @@ function addProduct(req, res) {
                 name: req.body.name,
                 description: req.body.description,
                 origin: req.body.origin,
-                type : req.body.typeProd,
+                type : req.body.type,
+                quantity: req.body.quantity,
+                //image: req.file.path,
                 // avatar: req.body.avatar,
                 //Procurement
                 water: req.body.water, //valor fijo
@@ -58,11 +66,46 @@ function addProduct(req, res) {
                 CO2Recipient: CO2Recipient.toFixed(4),
                 CO2Total: (req.body.water * 0.000298 + req.body.electricity * 0.167 + CO2Food + CO2Transport + CO2Recipient).toFixed(4)
             })
-            console.log(product)
+            //console.log(product)
             product.save();
             return res.status(201).send({ message: "Se ha añadido correctamente el producto" })
         } else return res.status(403).send({ message: "No eres administrador" })
     })
+}
+
+function attachImage(req,res){
+    console.log(req.file)
+    User.findById(req.user, (err, user) => {
+        if (err) return res.status(500).send({ message: err })
+        if (!user) return res.status(404).send({ message: "no existe usuario" })
+        if (user.role == "EMPRESA") {
+            // Product.findById(req.params.prod, (err,prod) =>{
+            //     console.log(req.params.prod)
+            //     if(prod) console.log(prod)
+            //     else if (!prod) console.log("no")
+            //     else console.log("error")
+                
+            // })
+            Product.findOneAndUpdate({_id: req.params.prod},{image:req.file.filename},(err,prod)=>{
+                if(prod) res.status(201).send({ message: "Se ha añadido correctamente la imagen" })
+                else return res.status(400).send({message : "Error"})
+            });
+        } else return res.status(403).send({ message: "No eres administrador" })
+    })
+
+}
+
+function getImage(req,res){
+    User.findById(req.user, (err, user) => {
+        if (err) return res.status(500).send({ message: err })
+        if (!user) return res.status(404).send({ message: "no existe usuario" })
+        if (user.role == "EMPRESA") {
+            Product.findById(req.params.prod, (err,prod) => {
+                if(prod) console.log(prod.image);
+            })
+        } else return res.status(403).send({ message: "No eres administrador" })
+    })
+
 }
 
 function removeProduct(req, res) {
@@ -80,7 +123,6 @@ function removeProduct(req, res) {
 }
 
 function getProduct(req, res) {
-    console.log(req)
     Product.findById(req.params.id, (err, product) => {
         if (err) return res.status(500).send({ message: err })
         if (!product) return res.status(404).send({ message: "no existe producto" })
@@ -88,7 +130,6 @@ function getProduct(req, res) {
     })
 }
 function getProductAux(product) {
-    console.log(product)
     Product.findById(product, (err, product) => {
         return product;
       })
@@ -129,4 +170,6 @@ module.exports = {
     getAllProducts,
     isAType,
     getAllProductsByProdType,
+    attachImage,
+    getImage
 }
