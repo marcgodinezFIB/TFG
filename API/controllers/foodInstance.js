@@ -3,6 +3,7 @@
 const mongoose = require('mongoose')
 const FoodInstance = require('../models/foodInstance')
 const User = require('../models/user')
+const ObjectId = require('mongodb').ObjectId;
 
 function addFoodInstance(req, res) {
     User.findById(req.user, (err, user) => {
@@ -46,7 +47,15 @@ function getAllFoodInstances(req, res) {
         if (!foods) return res.status(404).send({ message: "no existen alimentos" })
         if (foods) return res.status(200).send({ message: foods })
     })
+}
 
+function getFoodInstances(req,res){
+    let objId = new ObjectId(req.params.id);
+    FoodInstance.find({ food: objId},(err,foodInstances) => {
+        if (err) return res.status(500).send({ message: err })
+        if (!foodInstances) return res.status(404).send({ message: "no existen alimentos" })
+        if (foodInstances) return res.status(200).send({ message: foodInstances })
+    })
 }
 
 
@@ -56,4 +65,5 @@ module.exports = {
     removeFoodInstance,
     getFoodInstance,
     getAllFoodInstances,
+    getFoodInstances
 }
