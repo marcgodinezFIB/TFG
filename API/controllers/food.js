@@ -32,6 +32,25 @@ function removeFood(req, res) {
         } else return res.status(403).send({ message: "No eres administrador" })
     })
 }
+function editFood(req, res) {
+    User.findById(req.user, (err, user) => {
+        if (err) return res.status(500).send({ message: err })
+        if (!user) return res.status(404).send({ message: "no existe usuario" })
+        if (user.role == "EMPRESA") {
+            var update = {
+                $set: {
+                    name: req.body.name,
+                    foodType: req.body.foodType,
+                    CO2PerKg: req.body.CO2PerKg,
+                },   
+            }
+            Food.findOneAndUpdate({_id : req.params.id},update,{upsert: true}, function(err,doc){
+                if (err) { throw err; }
+            });
+            return res.status(201).send({message : "Se ha modificado correctamente el alimento"})
+        } else return res.status(403).send({ message: "No eres administrador" })
+    })
+}
 
 function getFood(req, res) {
     Food.findById(req.params.id, (err, food) => {
@@ -63,5 +82,6 @@ module.exports = {
     removeFood,
     getFood,
     getAllFoods,
-    getAllFoodsByTypeProd
+    getAllFoodsByTypeProd,
+    editFood
 }

@@ -8,7 +8,7 @@
             </div>
             <div class="row">
                 <div class="col-3">
-                <label>Nombre:</label>
+                <label>Nombre</label>
                 </div>
                 <div class="col-3">
                 <b-form-input trim type="text" required value="aaa" v-model="name" class="form-control my-2" />

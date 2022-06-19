@@ -1,7 +1,7 @@
 <template>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark" :key="$route.fullPath">
             <div class="container-fluid">
-                <img style="height: 40px;width: 40px;" src="../assets/css/arbol1.png"/><a class="navbar-brand" href="/">CarbonFootprintScan</a>
+                <a href="/"><img style="height: 52px;width: 150px;" src="../assets/css/LOGO_CABECERA.png"/></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -14,16 +14,22 @@
                         <a class="nav-link" v-if="isLoggedIn" href="/productlist">Lista de productos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" v-if="isLoggedIn" href="/typeprods">Tipos de alimentos</a>
+                        <a class="nav-link" v-if="isLoggedIn" href="/createFood">Crear alimento</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" v-if="isLoggedIn" href="/foods">Alimentos</a>
+                        <a class="nav-link" v-if="isLoggedIn" href="/foodList">Lista de alimentos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" v-if="isLoggedIn" href="/transports">Transportes</a>
+                        <a class="nav-link" v-if="isLoggedIn" href="/createTransport">Crear transporte</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" v-if="isLoggedIn" href="/recipients">Envases</a>
+                        <a class="nav-link" v-if="isLoggedIn" href="/transportList">Lista de transportes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" v-if="isLoggedIn" href="/createRecipient">Crear envase</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" v-if="isLoggedIn" href="/recipientList">Lista de envases</a>
                     </li>
                     
                 </ul>
@@ -31,14 +37,14 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" v-if="!isLoggedIn" href="/login">Login</a>
+                        <a class="nav-link" v-if="!isLoggedIn" href="/login">Iniciar sesión</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" v-if="!isLoggedIn" href="/signup">Sign up</a>
+                        <a class="nav-link" v-if="!isLoggedIn" href="/signup">Registrarse</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" v-if="isLoggedIn" @click="logout" href="/login">Logout</a>
+                        <a class="nav-link" v-if="isLoggedIn" @click="logout" href="/login">Cerrar sesión</a>
                     </li>
                 </ul>
             </div>
@@ -66,3 +72,9 @@ export default {
     }
 }
 </script>
+<style>
+  *{
+  font-family: "Roboto";
+
+}
+</style>

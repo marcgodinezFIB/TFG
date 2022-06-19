@@ -13,43 +13,76 @@ function signUp(req, res) {
         password: bcrypt.hashSync(req.body.password, 10),
         role: "EMPRESA"
     })
-    user.save((err) => {
-        if (err){
-            if(err.code == "11000")
-                return res.status(500).json({
-                    message: `Ya existe usuario`
-                })
-
-    }
-        return res.status(200).json({ 
-            token: service.createToken(user), 
-            email: user.email,
-            username: user.username,
-            role: user.role })
+    User.findOne({username: req.body.username}, (err,user1)=>{
+        if(user1) return res.status(500).json({
+            message: `Ya existe un usuario con este nombre de usuario`
+        })
+        else if(!user1) {
+            user.save((err) => {
+                if (err){
+                    if(err.code == "11000")
+                        return res.status(500).json({
+                            message: `Ya existe un usuario con este correo electrónico`
+                        })
+        
+            }
+                return res.status(200).json({ 
+                    token: service.createToken(user), 
+                    email: user.email,
+                    username: user.username,
+                    role: user.role })
+            })
+        }
     })
+
 }
 
 function signIn(req, res) { 
-    User.findOne({ email: req.body.email }, (err, user) => {
-        if (err){ 
-            return res.status(500).json({ message: err })}
-        if (!user){
-            return res.status(404).json({ message: "No existe usuario" })
-        } 
-        if (!bcrypt.compareSync(req.body.password, user.password)) {
-            return res.status(400).json({
-                message:"Usuario o contraseña incorrectos"
-            });
-        }        
-        req.user = user
-        return res.status(200).json({
-            message: "Te has logueado correctamente",
-            token: service.createToken(user),
-            id: user._id,
-            email: user.email,
-            role: user.role
-        })
-    });
+    if (req.body.email.indexOf('@') > -1) {
+        User.findOne({ email: req.body.email }, (err, user) => {
+            if (err){ 
+                return res.status(500).json({ message: err })}
+            if (!user){
+                return res.status(404).json({ message: "No existe usuario" })
+            } 
+            if (!bcrypt.compareSync(req.body.password, user.password)) {
+                return res.status(400).json({
+                    message:"Usuario o contraseña incorrectos"
+                });
+            }        
+            req.user = user
+            return res.status(200).json({
+                message: "Te has logueado correctamente",
+                token: service.createToken(user),
+                id: user._id,
+                email: user.email,
+                role: user.role
+            })
+        });
+    }
+    else {
+        User.findOne({ username: req.body.email }, (err, user) => {
+            if (err){ 
+                return res.status(500).json({ message: err })}
+            if (!user){
+                return res.status(404).json({ message: "No existe usuario" })
+            } 
+            if (!bcrypt.compareSync(req.body.password, user.password)) {
+                return res.status(400).json({
+                    message:"Usuario o contraseña incorrectos"
+                });
+            }        
+            req.user = user
+            return res.status(200).json({
+                message: "Te has logueado correctamente",
+                token: service.createToken(user),
+                id: user._id,
+                email: user.email,
+                role: user.role
+            })
+        });
+
+    }
 }
 
 function signInAdmin(req, res) {

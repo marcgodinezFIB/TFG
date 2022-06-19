@@ -61,15 +61,12 @@ import FoodList from './AdminTools/FoodList.vue'
 
 import CreateTransport from './AdminTools/CreateTransport.vue'
 import TransportList from './AdminTools/TransportList.vue'
-import TypeProdList from './AdminTools/TypeProdList.vue'
 import RecipientList from './AdminTools/RecipientList.vue'
-
-import CreateTypeProd from './AdminTools/CreateTypeProd.vue'
 import CreateRecipient from './AdminTools/CreateRecipient.vue'
 
 export default {
   name: 'AdminTools',
-    components: { CreateFood, FoodList, CreateTransport, CreateTypeProd, CreateRecipient, TransportList, TypeProdList, RecipientList},
+    components: { CreateFood, FoodList, CreateTransport,  CreateRecipient, TransportList, RecipientList},
 
 data() {
   return { 

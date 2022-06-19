@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
         cb(null, '../api/uploads/');
     },
     filename: function(req, file, cb){
-        cb(null,Date.now() + file.originalname);
+        cb(null,file.originalname);
     }
 });
 
@@ -43,7 +43,9 @@ api.post('/login', UserCtrl.signIn);
 api.get('/profile', auth, UserCtrl.showUser);
 api.post('/signinadmin', UserCtrl.signInAdmin);
 
-api.post('/addproduct', auth, upload.single("image"), ProductCtrl.addProduct);
+api.post('/addproduct', auth, ProductCtrl.addProduct);
+api.post('/editproduct/:id', auth, ProductCtrl.editProduct);
+
 api.get('/getallproducts', ProductCtrl.getAllProducts);
 api.get('/getproduct/:id', ProductCtrl.getProduct);
 api.delete('/removeproduct/:id', auth, ProductCtrl.removeProduct);
@@ -51,7 +53,6 @@ api.get('/getallproducts/:prod', ProductCtrl.getAllProductsByProdType);
 api.post('/attachimage/:prod', auth, upload.single("image"), ProductCtrl.attachImage);
 
 api.post('/saveimage', auth, upload.single("image"), function (req,res){
-    console.log(req.file);
     return res.status(200).send({message : "Imagen subida"})
 });
 
@@ -66,6 +67,8 @@ api.get('/getalltypeprods', TypeProdCtrl.getAllTypeProd);
 
 
 api.post('/addfood', auth, FoodCtrl.addFood);
+api.post('/editFood/:id', auth, FoodCtrl.editFood);
+
 api.get('/getallfood', FoodCtrl.getAllFoods);
 api.get('/getfood/:id', FoodCtrl.getFood);
 api.delete('/removefood/:id', auth, FoodCtrl.removeFood);
@@ -77,6 +80,7 @@ api.get('/getallFoodInstance', FoodInstanceCtrl.getAllFoodInstances);
 api.get('/getFoodInstance/:id', FoodInstanceCtrl.getFoodInstance);
 api.delete('/removeFoodInstance/:id', auth, FoodInstanceCtrl.removeFoodInstance);
 api.get('/getallFoodsInstances', FoodInstanceCtrl.getAllFoodInstances);
+api.get('/getFoodInstances/:id', FoodInstanceCtrl.getFoodInstances);
 
 api.post('/addAnimal', auth, AnimalCtrl.addAnimal);
 api.get('/getallAnimal', AnimalCtrl.getAllAnimals);
@@ -90,16 +94,16 @@ api.get('/getAnimalInstance/:id', AnimalInstanceCtrl.getAnimalInstance);
 api.delete('/removeAnimalInstance/:id', auth, AnimalInstanceCtrl.removeAnimalInstance);
 api.get('/getallAnimalsInstances', AnimalInstanceCtrl.getAllAnimalInstances);
 
-api.post('/addFavoriteProduct/', auth, FavoriteProductCtrl.addFavoriteProduct);
+api.post('/addFavoriteProduct/:prod', auth, FavoriteProductCtrl.addFavoriteProduct);
 api.get('/getallFavoriteProduct', FavoriteProductCtrl.getAllFavoriteProducts);
 api.get('/getFavoriteProduct/:user', FavoriteProductCtrl.getFavoriteProduct);
 api.delete('/removeFavoriteProduct/:prod/', auth, FavoriteProductCtrl.removeFavoriteProduct);
 api.get('/getallFavoriteProducts/:user', FavoriteProductCtrl.getAllFavoriteProducts);
 
-api.post('/addRecentProduct/', auth, RecentProductCtrl.addRecentProduct);
+api.post('/addRecentProduct/:prod', auth, RecentProductCtrl.addRecentProduct);
 api.get('/getallRecentProduct', RecentProductCtrl.getAllRecentProducts);
 api.get('/getRecentProduct/:user', RecentProductCtrl.getRecentProduct);
-api.delete('/removeRecentProduct/:prod/', auth, RecentProductCtrl.removeRecentProduct);
+api.delete('/removeRecentProduct/:prod', auth, RecentProductCtrl.removeRecentProduct);
 api.get('/getallRecentProducts/:user', RecentProductCtrl.getAllRecentProducts);
 
 api.post('/addVegetal', auth, VegetalCtrl.addVegetal);
@@ -114,6 +118,8 @@ api.delete('/removeVegetalInstance/:id', auth, VegetalInstanceCtrl.removeVegetal
 api.get('/getallVegetalInstances', VegetalInstanceCtrl.getAllVegetalInstances);
 
 api.post('/addRecipient', auth, RecipientCtrl.addRecipient);
+api.post('/editRecipient/:id', auth, RecipientCtrl.editRecipient);
+
 api.get('/getRecipient/:id', RecipientCtrl.getRecipient);
 api.delete('/removeRecipient/:id', auth, RecipientCtrl.removeRecipient);
 api.get('/getallRecipients', RecipientCtrl.getAllRecipients);
@@ -124,9 +130,20 @@ api.delete('/removeRecipientInstance/:id', auth, RecipientInstanceCtrl.removeRec
 api.get('/getallRecipientInstances', RecipientInstanceCtrl.getAllRecipientInstances);
 
 api.post('/addtransport', auth, TransportCtrl.addTransport);
+api.post('/editTransport/:id', auth, TransportCtrl.editTransport);
+
 api.get('/getAllTransports', TransportCtrl.getAllTransports);
 api.get('/gettransport/:id', TransportCtrl.getTransport);
 api.delete('/removetransport/:id', auth, TransportCtrl.removeTransport);
+api.get('/getAllCountries', TransportCtrl.getAllCountries);
+api.get('/getAllStatesByCountry/:country', TransportCtrl.getAllStatesByCountry);
+api.get('/getAllCitiesByState/:country/:state', TransportCtrl.getAllCitiesByState);
+
+api.get('/getcountryByCode/:code', TransportCtrl.getcountryByCode);
+api.get('/getStateByISO/:code/:iso', TransportCtrl.getStateByISO);
+api.get('/getCityByName/:code/:iso/:name', TransportCtrl.getCityByName);
+
+
 
 api.post('/addtransportInstance', auth, TransportInstanceCtrl.addTransportInstance);
 api.get('/getTransportInstance/:id', TransportInstanceCtrl.getTransportInstance);

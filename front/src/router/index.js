@@ -43,22 +43,40 @@ const routes = new VueRouter({
             import ('../components/ProductList.vue')
     },
     {
-        path: '/foods',
+        path: '/foodList',
         name: 'Foods',
         component: () =>
-            import ('../components/AdminTools/Food.vue')
+            import ('../components/AdminTools/FoodList.vue')
     },
     {
-        path: '/recipients',
+        path: '/createFood',
+        name: 'Foods',
+        component: () =>
+            import ('../components/AdminTools/CreateFood.vue')
+    },
+    {
+        path: '/recipientList',
         name: 'Recipients',
         component: () =>
-            import ('../components/AdminTools/Recipient.vue')
+            import ('../components/AdminTools/RecipientList.vue')
     },
     {
-        path: '/transports',
+        path: '/createRecipient',
+        name: 'Recipients',
+        component: () =>
+            import ('../components/AdminTools/CreateRecipient.vue')
+    },
+    {
+        path: '/transportList',
         name: 'Transports',
         component: () =>
-            import ('../components/AdminTools/Transport.vue')
+            import ('../components/AdminTools/TransportList.vue')
+    },
+    {
+        path: '/createTransport',
+        name: 'Transports',
+        component: () =>
+            import ('../components/AdminTools/CreateTransport.vue')
     },
     {
         path: '/typeprods',

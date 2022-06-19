@@ -35,7 +35,7 @@ function getTypeProd(req, res) {
     TypeProd.findById(req.params.id, (err, typeprod) => {
         if (err) return res.status(500).send({ message: err })
         if (!typeprod) return res.status(404).send({ message: "no existe producto" })
-        if (typeprod) return res.status(200).send({ typeprod })
+        if (typeprod) return res.status(200).send({ message : typeprod })
     })
 }
 

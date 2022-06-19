@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import CreateFood from './CreateFood.vue'
 import FoodList from './FoodList.vue'
 

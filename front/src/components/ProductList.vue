@@ -79,33 +79,39 @@
       small
       @filtered="onFiltered"
     >
-    
       <template #cell(actions)="row">
         <b-button-group>
           <b-button
             variant="outline-secondary"
             size="sm"
-            @click="viewProduct(row.item, row.index)"
+            @click="editProduct(row.item, row.index)"
           >
-            Ver producto
+            Editar
           </b-button>
           <b-button
             variant="outline-secondary"
             size="sm"
-            @click="editProduct(row.item, row.index)"
+            @click="viewProduct(row.item, row.index)"
           >
-            Editar producto
+            Ver
           </b-button>
           <b-button
             variant="outline-danger"
             size="sm"
             @click="deleteProduct(row.item, row.index)"
           >
-            Eliminar producto
+            Eliminar
           </b-button></b-button-group
         >
       </template>
-    </b-table>
+    </b-table><b-pagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="perPage"
+      aria-controls="my-table"
+      pills
+      align="center"
+    ></b-pagination>
     <b-modal
       :id="infoModal.id"
       :title="infoModal.title"
@@ -137,50 +143,56 @@ export default {
           class: "text-center",
         },
         {
-          key: "origin",
-          label: "Origen",
+          key: "originCity",
+          label: "Ciudad origen",
+          sortable: true,
+          class: "text-center",
+        },
+        {
+          key: "totalDistance",
+          label: "Distancia",
           sortable: true,
           class: "text-center",
         },
         {
           key: "CO2Food",
-          label: "gCO2 por alimentos",
+          label: "Kg CO₂eq por alimentos",
           sortable: true,
           class: "text-center",
         },
         {
           key: "CO2Water",
-          label: "gCO2 por agua",
+          label: "Kg CO₂eq por agua",
           sortable: true,
           class: "text-center",
         },
         {
           key: "CO2Electricity",
-          label: "gCO2 por electricidad",
+          label: "Kg CO₂eq por electricidad",
           sortable: true,
           class: "text-center",
         },
         {
           key: "CO2Procurement",
-          label: "gCO2 por producción",
+          label: "Kg CO₂eq por producción",
           sortable: true,
           class: "text-center",
         },
         {
           key: "CO2Transport",
-          label: "gCO2 por transportes",
+          label: "Kg CO₂eq por transportes",
           sortable: true,
           class: "text-center",
         },
         {
           key: "CO2Recipient",
-          label: "gCO2 por envases",
+          label: "Kg CO₂eq por envases",
           sortable: true,
           class: "text-center",
         },
         {
           key: "CO2Total",
-          label: "gCO2 total",
+          label: "Kg CO₂eq total",
           sortable: true,
           class: "text-center",
         },
@@ -189,7 +201,6 @@ export default {
       totalRows: 1,
       currentPage: 1,
       perPage: 25,
-      pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
       sortBy: "",
       sortDesc: false,
       sortDirection: "asc",
@@ -253,12 +264,24 @@ export default {
         this.items.splice(index, 1);
       }
     },
-        editProduct(item, index) {
+    editProduct(item, index) {
       this.$router.push({path : '/AddProduct?id=' + item._id})
     },
     viewProduct(item, index) {
-      this.$router.push({path : '/ViewProduct?id=' + item._id})
+      this.$router.push({path : '/AddProduct?id=' + item._id + "&v=1"})
     }
   },
 };
 </script>
+<style>
+.page-item.active .page-link {
+  color: #fff !important;
+  background: #05686D !important;
+  border: #fff;
+}
+
+.page-item .page-link {
+  color: #05686D !important;
+  background: #fff !important;
+  border: #05686D;
+}</style>

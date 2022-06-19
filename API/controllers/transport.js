@@ -1,10 +1,13 @@
 'use strict'
 
+
 const mongoose = require('mongoose')
 const Transport = require('../models/transport')
 const User = require('../models/user')
 const Product = require('../models/product')
 const cities2 = require('all-the-cities');
+const { Country, CountryLite, State, City } = require('country-state-city-js')
+
 
 function addTransport(req, res) {
     User.findById(req.user, (err, user) => {
@@ -19,6 +22,26 @@ function addTransport(req, res) {
             })
             transport.save();
             return res.status(201).send({ message: "Se ha añadido correctamente el transporte" })
+        } else return res.status(403).send({ message: "No eres administrador" })
+    })
+}
+function editTransport(req, res) {
+    User.findById(req.user, (err, user) => {
+        if (err) return res.status(500).send({ message: err })
+        if (!user) return res.status(404).send({ message: "no existe usuario" })
+        if (user.role == "EMPRESA") {
+            var update = {
+                $set: {
+                    name: req.body.name,
+                    capacity: req.body.capacity,
+                    distance: req.body.distance,
+                    CO2PerKm: req.body.CO2PerKm,
+                },   
+            }
+            Transport.findOneAndUpdate({_id : req.params.id},update,{upsert: true}, function(err,doc){
+                if (err) { throw err; }
+            });
+            return res.status(201).send({message : "Se ha modificado correctamente el transporte"})
         } else return res.status(403).send({ message: "No eres administrador" })
     })
 }
@@ -62,15 +85,47 @@ function getAllCities(req, res) {
     return res.status(200).send({message: cities2.filter(x => x)});
 }
 
-function distanceBetweenTwoCities(){
-    //Autocomplete pidiendo todas y aqui pasaremos el cityId 
-    var city1 = cities2.filter(city => city.name == 'Barcelona' && city.country == 'ES')[0].loc.coordinates;
-    var city2 = cities2.filter(city => city.name == 'Madrid' && city.country == 'ES')[0].loc.coordinates;
+function distanceBetweenTwoCities(city1lat,city1long,city2lat,city2long){
     var GeoPoint = require('geopoint');
-    var point1 = new GeoPoint(city1[0],city1[1]);
-    var point2 = new GeoPoint(city2[0],city2[1]);
+    var point2 = new GeoPoint(city2lat,city2long);
+    var point1 = new GeoPoint(parseFloat(city1lat),parseFloat(city1long));
+    
     var distance = point1.distanceTo(point2, true)
     return distance;
+}
+
+function getAllCountries(req,res){
+    const countries = Country();
+    res.status(200).send({message : countries});
+}
+
+function getAllStatesByCountry(req,res){
+    const states = State(req.params.country);
+    res.status(200).send({message : states});
+}
+
+function getAllCitiesByState(req,res){
+    const cities = City(req.params.country,req.params.state);
+    res.status(200).send({message : cities});
+}
+
+function getcountryByCode(req,res){
+    const country = Country(req.params.code);
+    res.status(200).send({message : country});
+    
+}
+function getStateByISO(req,res){
+    const state = State(req.params.code, req.params.iso);
+    res.status(200).send({message : state});
+    
+}
+
+function getCityByName(req,res){
+    const city = City(req.params.code, req.params.iso);
+    const result = city.find(x => x.name == req.params.name);
+    res.send({message : result});
+    
+    
 }
 
 //func calculo consumo total( constantes consumo km/transporte)
@@ -78,10 +133,18 @@ function distanceBetweenTwoCities(){
 
 module.exports = {
     addTransport,
+    editTransport,
     removeTransport,
     getTransport,
     getAllTransports,
     distanceBetweenTwoCities,
     getCity,
-    getAllCities
+    getAllCities,
+    getAllCountries,
+    getAllStatesByCountry,
+    getAllCitiesByState,
+
+    getcountryByCode,
+    getStateByISO,
+    getCityByName
 }

@@ -1,5 +1,7 @@
 <template>
   <b-card class="vue-template forms">
+          <img style="height: 170px;width: 225px;padding-left: 75px;padding-bottom: 20px;" src="../assets/css/LOGOTIPO_NEGRO.png" />
+
     <h3
       style="
         text-align: center;
@@ -8,7 +10,7 @@
         padding-bottom: 20px;
       "
     >
-      Login
+      Iniciar sesión
     </h3>
 
     <b-alert v-if="mensaje != ''" show variant="danger">{{ mensaje }}</b-alert>
@@ -24,7 +26,7 @@
             type="text"
             required
             class="form-control my-2"
-            placeholder="Email"
+            placeholder="Correo electrónico o usuario"
             v-model="email"
         /></b-input-group>
       </div>
@@ -40,7 +42,7 @@
             trim
             type="password"
             class="form-control my-2"
-            placeholder="Password"
+            placeholder="Contraseña"
             v-model="password"
         /></b-input-group>
       </div>

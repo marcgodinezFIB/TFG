@@ -1,5 +1,6 @@
 <template>
   <b-card class="vue-tempalte forms">
+    <img style="height: 170px;width: 225px;padding-left: 75px;padding-bottom: 20px;" src="../assets/css/LOGOTIPO_NEGRO.png" />
     <h3
       style="
         text-align: center;
@@ -8,7 +9,7 @@
         padding-bottom: 20px;
       "
     >
-      Sign Up
+      Registrarse
     </h3>
     <b-alert v-if="mensaje != ''" show variant="danger">{{ mensaje }}</b-alert>
     <div class="row">
@@ -23,7 +24,7 @@
             type="text"
             required
             class="form-control my-2"
-            placeholder="Email address"
+            placeholder="Correo electrónico"
             v-model="email"
         /></b-input-group>
       </div>
@@ -40,7 +41,7 @@
             type="text"
             required
             class="form-control my-2"
-            placeholder="Username"
+            placeholder="Usuario"
             v-model="username"
         /></b-input-group>
       </div>
@@ -57,7 +58,7 @@
             trim
             type="password"
             class="form-control my-2"
-            placeholder="Password"
+            placeholder="Contraseña"
             v-model="password"
         /></b-input-group>
       </div>

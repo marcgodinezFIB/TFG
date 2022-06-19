@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const RecentProductSchema = new Schema({
-    user: {type: Schema.Types.ObjectId, required: [true]},
-    product: {type: Schema.Types.ObjectId, required: [true]},
+    user: {type: String, required: [true]},
+    product: {type: String, required: [true]},
     insertDate: { type: Date, default: Date.now() },
 
 })

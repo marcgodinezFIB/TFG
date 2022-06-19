@@ -3,7 +3,7 @@
     <div class="col">
       <table class="table">
         <thead v-if="rowData.length">
-          <th scope="col">Product type</th>
+          <th scope="col">Tipo de producto</th>
         </thead>
         <tbody>
           <tr v-for="(item, index) in rowData" :key="item.id">
@@ -54,3 +54,17 @@ export default {
   },
 };
 </script>
+
+<style>
+.page-item.active .page-link {
+  color: #fff !important;
+  background: #05686D !important;
+  border: #fff;
+}
+
+.page-item .page-link {
+  color: #05686D !important;
+  background: #fff !important;
+  border: #05686D;
+}
+</style>

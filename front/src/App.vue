@@ -51,3 +51,10 @@ export default {
   },
 };
 </script>
+<style>
+@font-face {
+  font-family: "Roboto";
+  src: local("Roboto"),
+   url(./fonts/SF.ttf) format("truetype");
+}
+</style>

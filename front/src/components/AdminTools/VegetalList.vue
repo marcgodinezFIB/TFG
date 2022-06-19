@@ -54,3 +54,16 @@ export default {
   },
 };
 </script>
+<style>
+.page-item.active .page-link {
+  color: #fff !important;
+  background: #05686D !important;
+  border: #fff;
+}
+
+.page-item .page-link {
+  color: #05686D !important;
+  background: #fff !important;
+  border: #05686D;
+}
+</style>

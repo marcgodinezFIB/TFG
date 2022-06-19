@@ -19,6 +19,25 @@ function addRecipient(req, res) {
     })
 }
 
+function editRecipient(req, res) {
+    User.findById(req.user, (err, user) => {
+        if (err) return res.status(500).send({ message: err })
+        if (!user) return res.status(404).send({ message: "no existe usuario" })
+        if (user.role == "EMPRESA") {
+            var update = {
+                $set: {
+                    name: req.body.name,
+                    CO2Perm3: req.body.CO2Perm3,
+                },   
+            }
+            Recipient.findOneAndUpdate({_id : req.params.id},update,{upsert: true}, function(err,doc){
+                if (err) { throw err; }
+            });
+            return res.status(201).send({message : "Se ha modificado correctamente el envase"})
+        } else return res.status(403).send({ message: "No eres administrador" })
+    })
+}
+
 function removeRecipient(req, res) {
     User.findById(req.user, (err, user) => {
         if (err) return res.status(500).send({ message: err })
@@ -53,6 +72,7 @@ function getAllRecipients(req, res) {
 
 module.exports = {
     addRecipient,
+    editRecipient,
     removeRecipient,
     getRecipient,
     getAllRecipients,

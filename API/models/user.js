@@ -9,10 +9,10 @@ let rolesValidos = {
 }
 
 let UserSchema = new Schema({
-    email: { type: String, unique: true, lowercase: true, required: [true] },
+    email: { type: String, index: {unique: true, dropDups: true}, lowercase: true, required: [true] },
     username: {
         type: String,
-        unique: true,
+        index: {unique: true, dropDups: true},
         lowercase: true,
         required: [true]
     },

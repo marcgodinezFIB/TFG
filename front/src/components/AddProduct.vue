@@ -1,391 +1,431 @@
 <template>
   <div>
     <b-card>
-      <b-tabs pills small card vertical>
-        <b-tab title="Información general" :active="step === 1">
-          <b-card-text>
+      <b-card-text>
+        <div class="row">
+          <p
+            style="
+              background-color: #05686D;
+              border-radius: 25px;
+              color: white;
+              font-size: x-large;
+              text-align-last: center;
+            "
+          >
+            Información general
+          </p>
+        </div>
+        <div class="row">
+          <div class="col-4">
             <div class="row">
-              <div class="col-4" v-if="this.$route.query.id != null">
-                <div class="row">
-                  <div class="col-2">
-                    <img v-if="this.image != null" style="width:200px; height:150px" id= "loadImage" v-bind:src="'http://localhost:3000/uploads/' + this.image">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <label>Imagen del producto:</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <input type="file" id ="image" @change="uploadFile">
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col">
-                    <b-button-group
-                      ><b-button
+              <div class="col">
+                <label
+                  >Imagen del producto</label
+                >
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-2">
+                <img
+                  v-if="this.image != null && this.imagepreview == null"
+                  style="width: 200px; height: 150px"
+                  id="loadImage"
+                  v-bind:src="'http://localhost:3000/uploads/' + this.image"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-2">
+                <img
+                  v-if="this.imagepreview != null"
+                  style="width: 200px; height: 150px"
+                  id="loadImage"
+                  :src="this.imagepreview"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <input
+                  v-if="this.$route.query.v == null"
+                  type="file"
+                  id="image"
+                  @change="uploadFile"
+                />
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col">
+                <b-button-group v-if="this.$route.query.v == null"
+                  ><b-button
                     variant="outline-secondary"
                     size="sm"
                     style="text-align: end"
                     @click="attachImage"
+                    :disabled="isDisabled"
                     >Guardar imagen</b-button
                   >
-                      <b-button
-                        size="sm"
-                        variant="outline-danger"
-                        @click="deleteImage"
-                        >Eliminar imagen</b-button
-                      ></b-button-group
-                    >
-                    
-                  </div>
-                </div>
-
-              </div>
-              <div class="col-4">
-                <div class="row">
-                  <div class="col">
-                    <label>Nombre:</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <b-form-input
-                      trim
-                      type="text"
-                      required
-                      v-model="productName"
-                      class="form-control my-2"
-                      :disabled="isDisabled"
-                    />
-                  </div>
-                </div>
-                <div class="row mt-4">
-                  <div class="col">
-                    <label>Descripción:</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <b-form-input
-                      trim
-                      type="text"
-                      required
-                      v-model="productDescription"
-                      class="form-control my-2"
-                      :disabled="isDisabled"
-                    />
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <label>Agua: (en L)</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                     <b-form-input
-                      trim
-                      type="number"
-                      required
-                      :disabled="isDisabled"
-                      value=""
-                      v-model="Water"
-                      class="form-control my-2"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="col-4">
-                <div class="row">
-                  <div class="col">
-                    <label>Origen:</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <b-form-input
-                      trim
-                      type="text"
-                      required
-                      v-model="productOrigin"
-                      class="form-control my-2"
-                      :disabled="isDisabled"
-                    />
-                  </div>
-                </div>
-                <div class="row mt-4">
-                  <div class="col-6">
-                    <div class="row"><label>Cantidad: (en Kg)</label></div>
-                  </div>
-                  <div class="col-6">
-                    <label>Tipo de producto:</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-6">
-                    <b-form-input
-                      trim
-                      type="number"
-                      required
-                      v-model="productQuantity"
-                      class="form-control my-2"
-                      :disabled="isDisabled"
-                    />
-                  </div>
-                  <div class="col">
-                    <div class="mt-2">
-                    <div>
-                    <select class="form-select"
-                      v-model="productType"
-                      @change="changeFoodType(productType.name)"
-                    >
-                      <option
-                        v-for="(foodtype, _id) in listFoodTypes"
-                        :value="foodtype"
-                        :disabled="isDisabled"
-                        :key="_id"
-                      >
-                        {{ foodtype.name }}
-                      </option>
-                    </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <label>Electricidad: (en kWh)</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                     <b-form-input
-                      trim
-                      type="number"
-                      required
-                      :disabled="isDisabled"
-                      value=""
-                      v-model="Electricity"
-                      class="form-control my-2"
-                    />
-                  </div>
-                </div>
-                <div class="row mt-4">
-                  <div class="col" style="text-align: end">
-                    <b-button-group
-                      ><b-button
-                        size="sm"
-                        variant="outline-secondary"
-                        @click="EditStep1"
-                        >Editar</b-button
-                      >
-                      <b-button
-                        size="sm"
-                        variant="outline-secondary"
-                        @click="NextStep1"
-                        >Guardar y continuar</b-button
-                      ></b-button-group
-                    >
-                  </div>
-                </div>
+                  <b-button
+                    size="sm"
+                    variant="outline-danger"
+                    @click="deleteImage"
+                    :disabled="isDisabled"
+                    >Eliminar imagen</b-button
+                  ></b-button-group
+                >
               </div>
             </div>
           </div>
-          <div class="row mt-3">
-                  <div class="col">
-                    <b-alert
-                      v-if="mensajeGeneralInfo != ''"
-                      show
-                      variant="danger"
-                      >{{ mensajeGeneralInfo }}</b-alert
-                    >
-                  </div>
-                </div>
-        </b-card-text>
-      </b-tab>
-        <b-tab title="Producción" :disabled="disabledTab2" :active="step === 2">
-          <b-card-text>
+          <div class="col-4">
             <div class="row">
-              <div class="col-6">
-                <div class="row">
-                  <div class="col-6">
-                    <div class="row"><label>Agua:</label></div>
-                    <div class="row"><span>(en L)</span></div>
-                  </div>
-                  <div class="col-6">
-                    <b-form-input
-                      trim
-                      type="number"
-                      required
-                      :disabled="isDisabledProcurement"
-                      value="aaa"
-                      v-model="Water"
-                      class="form-control my-2"
-                    />
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="row"><label>Electricidad:</label></div>
-                    <div class="row"><span>(en KWh)</span></div>
-                  </div>
-                  <div class="col-6">
-                    <b-form-input
-                      trim
-                      type="number"
-                      required
-                      :disabled="isDisabledProcurement"
-                      v-model="Electricity"
-                      class="form-control my-2"
-                    />
-                  </div>
-                </div>
-                <hr />
-                <div class="row"></div>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="row"><label>Alimento</label></div>
-                  </div>
-
-                  <div class="col-2 dropdown">
-                    <select
-                      v-model="selectedFoodType"
-                      @change="changeFoodType(selectedFoodType.name)"
-                    >
-                      <option
-                        v-for="(foodtype, _id) in listFoodTypes"
-                        :value="foodtype"
-                        :disabled="isDisabledProcurement"
-                        :key="_id"
-                      >
-                        {{ foodtype.name }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-6"></div>
-                  <div class="col-4 dropdown">
-                    <select v-model="selectedFood">
-                      <option
-                        v-for="(item, _id) in listFoods"
-                        :value="item"
-                        :disabled="isDisabledProcurement"
-                        :key="_id"
-                      >
-                        {{ item.name }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="row"><label>Cantidad:</label></div>
-                    <div class="row"><span>(en Kg)</span></div>
-                  </div>
-                  <div class="col-6">
-                    <b-form-input
-                      trim
-                      type="number"
-                      required
-                      :disabled="isDisabledProcurement"
-                      v-model="quantityFood"
-                      class="form-control my-2"
-                    />
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col" style="text-align: end">
-                    <b-button
-                      size="sm"
-                      variant="outline-secondary"
-                      @click="addFood"
-                      >Añadir</b-button
-                    >
-                  </div>
-                </div>
-                <div class="row mt-3">
-                  <div class="col">
-                    <b-alert
-                      v-if="mensajeProcurement != ''"
-                      show
-                      variant="danger"
-                      >{{ mensajeProcurement }}</b-alert
-                    >
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <b-alert v-if="mensajeFood != ''" show variant="danger">{{
-                      mensajeFood
-                    }}</b-alert>
-                  </div>
-                </div>
+              <div class="col">
+                <label>Nombre</label><a style="color: red"> *</a>
               </div>
-              <div class="col-1"></div>
-              <div class="col-5">
-                <div id="table">
-                  <table class="table">
-                    <thead v-if="rowDataFood.length">
-                      <th scope="col">Name</th>
-                      <th scope="col">Cantidad (en Kg)</th>
-                      <th scope="col">CO2 por kg</th>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(item, index) in rowDataFood" :key="item.id">
-                        <td>{{ item.selectedFood.name }}</td>
-                        <td>{{ item.quantityFood }}</td>
-                        <td>{{ item.selectedFood.CO2PerKg }}</td>
-                        <td>
-                          <b-button
-                            size="sm"
-                            variant="outline-danger"
-                            @click="deleteFood(index)"
-                            >Eliminar</b-button
-                          >
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b-form-input
+                  trim
+                  type="text"
+                  required
+                  v-model="productName"
+                  class="form-control my-2"
+                  :disabled="isDisabled"
+                />
               </div>
-              <div class="row mt-3">
-                <div class="col-6" style="text-align: end">
-                  <b-button-group
-                    ><b-button
-                      size="sm"
-                      variant="outline-secondary"
-                      @click="EditStep2"
-                      >Editar</b-button
-                    >
-                    <b-button
-                      size="sm"
-                      variant="outline-secondary"
-                      @click="NextStep2"
-                      >Guardar y continuar</b-button
-                    ></b-button-group
+            </div>
+            <div class="row mt-4">
+              <div class="col">
+                <label>Descripción</label><a style="color: red"> *</a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b-form-input
+                  trim
+                  type="text"
+                  required
+                  v-model="productDescription"
+                  class="form-control my-2"
+                  :disabled="isDisabled"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label>Agua (en L)</label><a style="color: red"> *</a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b-form-input
+                  trim
+                  type="number"
+                  required
+                  :disabled="isDisabled"
+                  value=""
+                  v-model="Water"
+                  class="form-control my-2"
+                />
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col">
+                <label>Distancia total</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b-form-input
+                  trim
+                  type="number"
+                  required
+                  :disabled="true"
+                  value=""
+                  v-model="totalDistance"
+                  class="form-control my-2"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="row">
+              <div class="col">
+                <label>Origen</label><a style="color: red"> *</a>
+              </div>
+            </div>
+            <div class="col">
+              <div class="row mt-2">
+                <div>
+                  <select
+                    class="form-select"
+                    v-model="country"
+                    @change="changeCountry(country.code)"
                   >
+                    <option
+                      v-for="(country, _id) in listCountries"
+                      :value="country"
+                      :disabled="isDisabled"
+                      :key="_id"
+                    >
+                      {{ country.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div>
+                  <select
+                    class="form-select"
+                    v-model="state"
+                    @change="changeState(country.code, state.iso)"
+                  >
+                    <option
+                      v-for="(state, _id) in listStates"
+                      :value="state"
+                      :disabled="isDisabled"
+                      :key="_id"
+                    >
+                      {{ state.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div v-if="this.$route.query.id == null" class="row mt-2">
+                <div>
+                  <select
+                    class="form-select"
+                    v-model="city"
+                    @change="changeOrigin(city)"
+                  >
+                    <option
+                      v-for="(city, _id) in listCities"
+                      :value="city"
+                      :disabled="isDisabled"
+                      :key="_id"
+                    >
+                      {{ city.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div v-if="this.$route.query.id != null" class="row mt-2">
+                <div>
+                  <select
+                    class="form-select"
+                    v-model="city"
+                    @change="changeOrigin(city)"
+                  >
+                    <option
+                      v-for="(city, _id) in listCities"
+                      :value="city"
+                      :disabled="isDisabled"
+                      :key="_id"
+                    >
+                      {{ city.name }}
+                    </option>
+                  </select>
                 </div>
               </div>
             </div>
-          </b-card-text>
-        </b-tab>
-        <b-tab title="Transporte" :disabled="disabledTab3" :active="step === 3">
-          <b-card-text>
-            <div class="row">
+            <div class="row mt-3">
               <div class="col-6">
                 <div class="row">
+                  <label>Cantidad (en Kg)<a style="color: red"> *</a></label>
+                </div>
+              </div>
+              <div class="col-6">
+                <label>Tipo de producto</label><a style="color: red"> *</a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <b-form-input
+                  trim
+                  type="number"
+                  required
+                  v-model="productQuantity"
+                  class="form-control my-2"
+                  :disabled="isDisabled"
+                />
+              </div>
+              <div class="col-6">
+                <select
+                  class="form-select my-2"
+                  v-model="productType"
+                  :disabled="isDisabled"
+                  @change="changeFoodType(productType.name)"
+                >
+                  <option
+                    v-for="(foodtype, _id) in listFoodTypes"
+                    :value="foodtype"
+                    :disabled="isDisabled"
+                    :key="_id"
+                  >
+                    {{ foodtype.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-6">
+                <label>Electricidad (en kWh)</label><a style="color: red"> *</a>
+              </div>
+              <div class="col-6">
+                <label>¿Renovable?</label><a style="color: red"> *</a>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-6">
+                <b-form-input
+                  trim
+                  type="number"
+                  required
+                  :disabled="isDisabled"
+                  value=""
+                  v-model="Electricity"
+                  class="form-control my-2"
+                />
+              </div>
+              <div class="col-6">
+                <b-form-radio-group
+                  v-model="isRenewal"
+                  :options="optionsRadio"
+                  :disabled="isDisabled"
+                  plain
+                  name="radio-inline"
+                  class="my-2"
+                ></b-form-radio-group>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-4">
+            <p
+              style="
+                background-color: #05686D;
+                border-radius: 25px;
+                color: white;
+                font-size: x-large;
+                text-align-last: center;
+              "
+            >
+              Alimentos
+            </p>
+            <div class="row">
+              <div class="col-6">
+                <div class="row"><label>Alimento</label></div>
+              </div>
+
+              <div class="col dropdown">
+                <select
+                  class="form-select"
+                  v-model="selectedFoodType"
+                  @change="changeFoodType(selectedFoodType.name)"
+                >
+                  <option
+                    v-for="(foodtype, _id) in listFoodTypes"
+                    :value="foodtype"
+                    :disabled="isDisabled"
+                    :key="_id"
+                  >
+                    {{ foodtype.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-6"></div>
+              <div class="col dropdown">
+                <select class="form-select" v-model="selectedFood">
+                  <option
+                    v-for="(item, _id) in listFoods"
+                    :value="item"
+                    :disabled="isDisabled"
+                    :key="_id"
+                  >
+                    {{ item.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <div class="row"><label>Cantidad:</label></div>
+                <div class="row"><span>(en Kg)</span></div>
+              </div>
+              <div class="col-6">
+                <b-form-input
+                  trim
+                  type="number"
+                  required
+                  :disabled="isDisabled"
+                  v-model="quantityFood"
+                  class="form-control my-2"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col" style="text-align: end">
+                <b-button
+                  size="sm"
+                  variant="outline-secondary"
+                  @click="addFood"
+                  :disabled="isDisabled"
+                  >Añadir</b-button
+                >
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col">
+                <b-alert
+                  v-if="mensajeProcurement != ''"
+                  show
+                  variant="danger"
+                  >{{ mensajeProcurement }}</b-alert
+                >
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b-alert v-if="mensajeFood != ''" show variant="danger">{{
+                  mensajeFood
+                }}</b-alert>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <p
+              style="
+                background-color: #05686D;
+                border-radius: 25px;
+                color: white;
+                font-size: x-large;
+                text-align-last: center;
+              "
+            >
+              Transportes
+            </p>
+            <div class="row">
+              <div class="col">
+                <div class="row">
                   <div class="col-6">
-                    <label>Transporte:</label>
+                    <label>Transportes</label>
                   </div>
                   <div class="col-6 my-2">
-                    <select v-model="selectedTransport" @change="getMaxParams">
+                    <select
+                      class="form-select"
+                      v-model="selectedTransport"
+                      @change="getMaxParams"
+                    >
                       <option
                         v-for="(transport, _id) in listTransports"
                         :value="transport"
                         :key="_id"
-                        :disabled="isDisabledTransport"
+                        :disabled="isDisabled"
                       >
                         {{ transport.name }}
                       </option>
@@ -405,7 +445,7 @@
                     <input
                       type="number"
                       v-model="capacity"
-                      :disabled="isDisabledTransport"
+                      :disabled="isDisabled"
                       class="form-control"
                     />
                   </div>
@@ -423,7 +463,7 @@
                     <input
                       type="number"
                       v-model="distance"
-                      :disabled="isDisabledTransport"
+                      :disabled="isDisabled"
                       class="form-control"
                     />
                   </div>
@@ -433,7 +473,7 @@
                     <b-button
                       size="sm"
                       variant="outline-secondary"
-                      :disabled="isDisabledTransport"
+                      :disabled="isDisabled"
                       @click="addTransport"
                       >Añadir</b-button
                     >
@@ -445,75 +485,39 @@
                       v-if="mensajeTransport != ''"
                       show
                       variant="danger"
-                      :disabled="isDisabledTransport"
+                      :disabled="isDisabled"
                       >{{ mensajeTransport }}</b-alert
                     >
                   </div>
                 </div>
               </div>
-              <div class="col-1"></div>
-              <div class="col-5">
-                <div id="table">
-                  <table class="table">
-                    <thead v-if="rowData.length">
-                      <th scope="col">Transport</th>
-                      <th scope="col">Capacity</th>
-                      <th scope="col">Distance</th>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(item, index) in rowData" :key="item.id">
-                        <td>{{ item.selectedTransport.name }}</td>
-                        <td>{{ item.distance }}</td>
-                        <td>{{ item.capacity }}</td>
-                        <td>
-                          <b-button
-                            size="sm"
-                            variant="outline-danger"
-                            @click="deleteTransport(index)"
-                            >Eliminar</b-button
-                          >
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
             </div>
-            <div class="row mt-3">
-              <div class="col-6" style="text-align: end">
-                <b-button-group
-                  ><b-button
-                    size="sm"
-                    variant="outline-secondary"
-                    @click="EditStep3"
-                    >Editar</b-button
-                  >
-                  <b-button
-                    size="sm"
-                    variant="outline-secondary"
-                    @click="NextStep3"
-                    >Guardar y continuar</b-button
-                  ></b-button-group
-                >
-              </div>
-            </div>
-          </b-card-text>
-        </b-tab>
-        <b-tab title="Residuos" :disabled="disabledTab4" :active="step === 4">
-          <b-card-text>
+          </div>
+          <div class="col-4">
+            <p
+              style="
+                background-color: #05686D;
+                border-radius: 25px;
+                color: white;
+                font-size: x-large;
+                text-align-last: center;
+              "
+            >
+              Envases
+            </p>
             <div class="row">
-              <div class="col-6">
+              <div class="col">
                 <div class="row">
                   <div class="col-6">
                     <div class="row"><label>Tipo de envase</label></div>
                   </div>
                   <div class="col-6 dropdown">
-                    <select v-model="selectedRecipient">
+                    <select class="form-select" v-model="selectedRecipient">
                       <option
                         v-for="(recipient, _id) in listRecipients"
                         :value="recipient"
                         :key="_id"
-                        :disabled="isDisabledRecipient"
+                        :disabled="isDisabled"
                       >
                         {{ recipient.name }}
                       </option>
@@ -523,7 +527,7 @@
                 <div class="row mt-2">
                   <div class="col-6">
                     <div class="row"><label>Dimensiones:</label></div>
-                    <div class="row"><span>(en m3)</span></div>
+                    <div class="row"><span>(en m³)</span></div>
                   </div>
                   <div class="col-6">
                     <b-form-input
@@ -531,7 +535,7 @@
                       type="number"
                       required
                       v-model="dimensionsRecipient"
-                      :disabled="isDisabledRecipient"
+                      :disabled="isDisabled"
                       class="form-control my-2"
                     />
                   </div>
@@ -542,37 +546,10 @@
                       size="sm"
                       variant="outline-secondary"
                       @click="addRecipient"
+                      :disabled="isDisabled"
                       >Añadir</b-button
                     >
                   </div>
-                </div>
-              </div>
-              <div class="col-1"></div>
-              <div class="col-5">
-                <div id="table">
-                  <table class="table">
-                    <thead v-if="rowDataRecipient.length">
-                      <th scope="col">Recipient</th>
-                      <th scope="col">Dimensions</th>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="(item, index) in rowDataRecipient"
-                        :key="item.id"
-                      >
-                        <td>{{ item.selectedRecipient.name }}</td>
-                        <td>{{ item.dimensionsRecipient }}</td>
-                        <td>
-                          <b-button
-                            size="sm"
-                            variant="outline-danger"
-                            @click="deleteRecipient(index)"
-                            >Eliminar</b-button
-                          >
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
                 </div>
               </div>
               <div class="row mt-3">
@@ -586,251 +563,217 @@
                 </div>
               </div>
             </div>
-            <div class="row mt-3">
-              <div class="col-6" style="text-align: end">
-                <b-button-group
-                  ><b-button size="sm" variant="outline-secondary"
-                    >Editar</b-button
-                  >
-                  <b-button
-                    size="sm"
-                    variant="outline-secondary"
-                    @click="NextStep4"
-                    >Guardar y continuar</b-button
-                  ></b-button-group
-                >
-              </div>
-            </div>
-          </b-card-text>
-        </b-tab>
-        <b-tab
-          title="Revisar y guardar"
-          :disabled="disabledTab5"
-          :active="step === 5"
-        >
-          <b-card-text>
-            <div class="row">
-              <div class="col-6" style="width: 50%; height: 50%; float: left">
-                <div class="row">
-                  <span>Información general</span>
-                  <hr />
-                  <div class="row">
-                    <div class="col-3">
-                      <label>Nombre:</label>
-                    </div>
-                    <div class="col-9">
-                      <b-form-input
-                        trim
-                        type="text"
-                        disabled
-                        v-model="productName"
-                        class="form-control my-2"
-                      />
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3">
-                      <label>Descripcion:</label>
-                    </div>
-                    <div class="col-9">
-                      <b-form-input
-                        trim
-                        type="text"
-                        disabled
-                        v-model="productDescription"
-                        class="form-control my-2"
-                      />
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3">
-                      <label>Origen:</label>
-                    </div>
-                    <div class="col-9">
-                      <b-form-input
-                        trim
-                        type="text"
-                        disabled
-                        v-model="productOrigin"
-                        class="form-control my-2"
-                      />
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3">
-                      <div class="row">
-                        <label>Agua:</label>
-                      </div>
-                      <div class="row">
-                        <a>(en L)</a>
-                      </div>
-                    </div>
-                    <div class="col-4">
-                      <b-form-input
-                        trim
-                        type="text"
-                        disabled
-                        v-model="Electricity"
-                        class="form-control my-2"
-                      />
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-3">
-                      <div class="row">
-                        <label>Electricidad:</label>
-                      </div>
-                      <div class="row">
-                        <a>(en KWh)</a>
-                      </div>
-                    </div>
-                    <div class="col-4">
-                      <b-form-input
-                        trim
-                        type="text"
-                        disabled
-                        v-model="Water"
-                        class="form-control my-2"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-6" style="width: 50%; height: 50%; float: left">
-                <div class="row" v-if="rowData.length">
-                  <span>Transporte</span>
-                  <hr />
-                </div>
-                <div id="table">
-                  <table class="table mt-2">
-                    <thead v-if="rowData.length">
-                      <th scope="col">Transport</th>
-                      <th scope="col">Capacity</th>
-                      <th scope="col">Distance</th>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(item, index) in rowData" :key="item.id">
-                        <td>{{ item.selectedTransport.name }}</td>
-                        <td>{{ item.distance }}</td>
-                        <td>{{ item.capacity }}</td>
-                        <td>
-                          <b-button
-                            size="sm"
-                            variant="outline-danger"
-                            @click="deleteTransport(index)"
-                            >Eliminar</b-button
-                          >
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div class="col-6" style="width: 50%; height: 50%; float: left">
-                <div class="row" v-if="rowDataFood.length">
-                  <span>Alimento</span>
-                  <hr />
-                </div>
-                <div id="table">
-                  <table class="table">
-                    <thead v-if="rowDataFood.length">
-                      <th scope="col">Name</th>
-                      <th scope="col">Cantidad (en Kg)</th>
-                      <th scope="col">CO2 por kg</th>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(item, index) in rowDataFood" :key="item.id">
-                        <td>{{ item.selectedFood.name }}</td>
-                        <td>{{ item.quantityFood }}</td>
-                        <td>{{ item.selectedFood.CO2PerKg }}</td>
-                        <td>
-                          <b-button
-                            size="sm"
-                            variant="outline-danger"
-                            @click="deleteFood(index)"
-                            >Eliminar</b-button
-                          >
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div class="col-6" style="width: 50%; height: 50%; float: left">
-                <div class="row" v-if="rowDataRecipient.length">
-                  <span>Envases</span>
-                  <hr />
-                </div>
-                <div id="table">
-                  <table class="table mt-2">
-                    <thead v-if="rowDataRecipient.length">
-                      <th scope="col">Recipient</th>
-                      <th scope="col">Dimensions</th>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="(item, index) in rowDataRecipient"
-                        :key="item.id"
+          </div>
+        </div>
+        <div class="row">
+          <hr />
+          <div class="col-4">
+            <p
+              v-if="rowDataFood.length"
+              style="
+                background-color: #05686D;
+                border-radius: 25px;
+                color: white;
+                font-size: x-large;
+                text-align-last: center;
+              "
+            >
+              Tabla de Alimentos
+            </p>
+            <div id="table">
+              <table class="table">
+                <thead v-if="rowDataFood.length">
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Cantidad (en Kg)</th>
+                  <th scope="col">CO₂ por Kg</th>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in rowDataFood" :key="item.id">
+                    <td>{{ item.selectedFood.name }}</td>
+                    <td>{{ item.quantityFood }}</td>
+                    <td>{{ item.selectedFood.CO2PerKg }}</td>
+                    <td>
+                      <b-button
+                        size="sm"
+                        variant="outline-danger"
+                        @click="deleteFood(index)"
+                        :disabled="isDisabled"
+                        >Eliminar</b-button
                       >
-                        <td>{{ item.selectedRecipient.name }}</td>
-                        <td>{{ item.dimensionsRecipient }}</td>
-                        <td>
-                          <b-button
-                            size="sm"
-                            variant="outline-danger"
-                            @click="deleteRecipient(index)"
-                            >Eliminar</b-button
-                          >
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-
-            <div>
+          </div>
+          <div class="col-4">
+            <p
+              v-if="rowData.length"
+              style="
+                background-color: #05686D;
+                border-radius: 25px;
+                color: white;
+                font-size: x-large;
+                text-align-last: center;
+              "
+            >
+              Tabla de Transportes
+            </p>
+            <div id="table">
+              <table class="table">
+                <thead v-if="rowData.length">
+                  <th scope="col">Transporte</th>
+                  <th scope="col">Distancia</th>
+                  <th scope="col">Capacidad</th>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in rowData" :key="item.id">
+                    <td>{{ item.selectedTransport.name }}</td>
+                    <td>{{ item.distance }}</td>
+                    <td>{{ item.capacity }}</td>
+                    <td>
+                      <b-button
+                        size="sm"
+                        variant="outline-danger"
+                        @click="deleteTransport(index, item)"
+                        :disabled="isDisabled"
+                        >Eliminar</b-button
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-4">
+            <p
+              v-if="rowDataRecipient.length"
+              style="
+                background-color: #05686D;
+                border-radius: 25px;
+                color: white;
+                font-size: x-large;
+                text-align-last: center;
+              "
+            >
+              Tabla de Envases
+            </p>
+            <div id="table">
+              <table class="table">
+                <thead v-if="rowDataRecipient.length">
+                  <th scope="col">Envase</th>
+                  <th scope="col">Dimensiones</th>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in rowDataRecipient" :key="item.id">
+                    <td>{{ item.selectedRecipient.name }}</td>
+                    <td>{{ item.dimensionsRecipient }}</td>
+                    <td>
+                      <b-button
+                        size="sm"
+                        variant="outline-danger"
+                        @click="deleteRecipient(index)"
+                        :disabled="isDisabled"
+                        >Eliminar</b-button
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col" style="text-align: end">
+            <b-button-group>
               <b-button
                 variant="outline-secondary"
                 size="sm"
                 style="text-align: end"
                 @click="addNewProduct"
+                :disabled="isDisabled"
                 >Guardar producto</b-button
               >
-            </div>
-          </b-card-text>
-        </b-tab>
-      </b-tabs>
+              <b-button
+                variant="outline-secondary"
+                size="sm"
+                style="text-align: end"
+                @click="$bvModal.show('bv-modal-example')"
+                :disabled="isViewMode"
+                >Generar QR</b-button
+              ></b-button-group
+            >
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <b-alert v-if="mensajeGeneralInfo != ''" show variant="danger">{{
+              mensajeGeneralInfo
+            }}</b-alert>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <b-alert v-if="mensajeDistancias != ''" show variant="danger">{{
+              mensajeDistancias
+            }}</b-alert>
+          </div>
+        </div>
+      </b-card-text>
     </b-card>
+    <b-modal id="bv-modal-example" hide-footer>
+      <template #modal-title>
+        <a> {{ productName }}</a>
+      </template>
+      <div class="d-block text-center">
+        <qr-code :text="this.$route.query.id" :size="350"></qr-code>
+      </div>
+      <b-button class="mt-3" block @click="$bvModal.hide('bv-modal-example')"
+        >Cerrar</b-button
+      >
+    </b-modal>
   </div>
 </template>
 <script>
 import axios from "axios";
+import Vue from "vue";
+import VueQRCodeComponent from "vue-qr-generator";
+Vue.component("qr-code", VueQRCodeComponent);
 
 export default {
   name: "AddProduct",
   data() {
     return {
+      optionsRadio: [
+        { text: "Sí", value: "1" },
+        { text: "No", value: "0" },
+      ],
+      isRenewal: null,
       step: 1,
       isDisabled: false,
-      isDisabledProcurement: false,
-      isDisabledTransport: false,
-      isDisabledRecipient: false,
-      disabledTab2: true,
-      disabledTab3: true,
-      disabledTab4: true,
-      disabledTab5: true,
-
+      isViewMode: true,
       listTypeProd: [],
       mensajeGeneralInfo: "",
       productName: "",
       productDescription: "",
-      productOrigin: "",
+      latitudeOrigin: "",
+      longitudeOrigin: "",
+      country: "",
+      listCountries: [],
+      state: "",
+      listStates: [],
+      city: "",
+      listCities: [],
+      // city: "",
+      // cityList:[],
+
       productType: "",
       productQuantity: "",
       image: null,
+      imagepreview: null,
 
+      totalDistance: "",
+      mensajeDistancias: "",
       Water: "",
       Electricity: "",
       listFoodTypes: [],
@@ -880,40 +823,33 @@ export default {
     this.getAllRecipients();
     this.getAllFoodTypes();
     this.getAllFoods();
+    this.getAllCountries();
   },
   methods: {
-    uploadFile(event){
-      this.image = event.target.files[0];
-
+    deleteImage() {
+      this.image = null;
+      this.imagepreview = null;
     },
-    getImage(){
-      if(this.image == null){
+    uploadFile(event) {
+      this.image = event.target.files[0];
+      this.imagepreview = URL.createObjectURL(this.image);
+      //this.imagename = this.image.name
+    },
+    getImage() {
+      if (this.image == null) {
         document.getElementById("image").hidden = true;
       }
     },
-    // onFileChange(item, e) {
-    //   var files = e.target.files || e.dataTransfer.files;
-    //   if (!files.length) return;
-    //   this.createImage(item, files[0]);
-    // },
-    // createImage(item, file) {
-    //   var image = new Image();
-    //   var reader = new FileReader();
-
-    //   reader.onload = (e) => {
-    //     this.image = e.target.result;
-    //   };
-    //   reader.readAsDataURL(file);
-    // },
-    attachImage(){
-      if(this.$route.query.id != null){
-        const formData = new FormData();
-        formData.append('image', this.image,this.image.name);
-        axios
-        .post("/attachimage/" + this.$route.query.id, formData,
-          {headers: {
+    attachImage() {
+      const formData = new FormData();
+      formData.append("image", this.image, this.image.name);
+      axios
+        .post("/saveimage/", formData, {
+          headers: {
             authorization: "Bearer " + localStorage.getItem("token"),
-          }}).then(
+          },
+        })
+        .then(
           (res) => {
             this.error = "";
           },
@@ -921,29 +857,60 @@ export default {
             this.error = err.response.data.error;
           }
         );
-      }
     },
+    loadCountry(countryName) {
+      axios.get("/getCountryByCode/" + countryName).then((res) => {
+        this.country = res.data.message;
+      });
+    },
+    loadState(countryName, stateISO) {
+      this.getAllStatesByCountry(countryName);
+      axios
+        .get("/getStateByISO/" + countryName + "/" + stateISO)
+        .then((res) => {
+          this.state = res.data.message;
+        });
+    },
+    loadCity(countryName, stateISO, cityName) {
+      this.getAllCitiesByState(countryName, stateISO);
+      axios
+        .get("/getCityByName/" + countryName + "/" + stateISO + "/" + cityName)
+        .then((res) => {
+          var x = res.data.message;
+          this.city = res.data.message;
+        });
+    },
+
     loadProduct() {
       if (this.$route.query.id != null) {
+        this.isViewMode = false;
         axios.get("getProduct/" + this.$route.query.id).then((res) => {
-          this.disabledTab2 = false;
-          this.disabledTab3 = false;
-          this.disabledTab4 = false;
-          this.disabledTab5 = false;
-          //hide save buttons if not edit
-          this.NextStep1()
+          if (this.$route.query.v != "1") this.isDisabled = false;
+          else this.isDisabled = true;
           //GeneralInfo
-          this.isDisabled = true;
           this.productName = res.data.product.name;
           this.productDescription = res.data.product.description;
-          this.productOrigin = res.data.product.origin;
-          this.productType = res.data.product.typeProd;
+          this.loadCountry(res.data.product.originCountry);
+          this.loadState(
+            res.data.product.originCountry,
+            res.data.product.originState
+          );
+          //this.city = res.data.product.originCity;
+          this.loadCity(
+            res.data.product.originCountry,
+            res.data.product.originState,
+            res.data.product.originCity
+          );
+          this.totalDistance = res.data.product.totalDistance;
+          this.originCountry = res.data.product.originCountry;
+
+          this.productType = this.loadProductType(res.data.product.type);
           this.productQuantity = res.data.product.quantity;
-          this.image = res.data.product.image
+          this.image = res.data.product.image;
           //Produccion
-          this.isDisabledProcurement = true;
           this.Water = res.data.product.water;
           this.Electricity = res.data.product.electricity;
+          this.isRenewal = res.data.product.isRenewal ? 1 : 0;
           //Food
           for (var i = 0; i < res.data.product.foods.length; ++i) {
             var auxFood = {
@@ -953,6 +920,8 @@ export default {
             };
             this.rowDataFood.push(auxFood);
           }
+          this.foodInstances = res.data.product.foods;
+          //disabled selects foods
 
           //Transport
           for (var j = 0; j < res.data.product.transport.length; ++j) {
@@ -963,6 +932,8 @@ export default {
             };
             this.rowData.push(auxTransport);
           }
+          this.transportInstances = res.data.product.transport;
+          //disabled selects transport
 
           //Recipient
           for (var k = 0; k < res.data.product.recipient.length; ++k) {
@@ -972,14 +943,72 @@ export default {
             };
             this.rowDataRecipient.push(auxRecipient);
           }
+           this.recipientInstances = res.data.product.recipient;
         });
       }
+    },
+    loadProductType(typeProd) {
+      axios.get("/gettypeprod/" + typeProd).then((res) => {
+        this.productType = res.data.message;
+      });
     },
     getAllTypesProd() {
       axios.get("/getAllTypeProd").then((res) => {
         this.listTypeProd = res.data.message;
       });
     },
+    getAllCountries() {
+      axios.get("/getAllCountries").then((res) => {
+        this.listCountries = res.data.message;
+      });
+    },
+    getAllStatesByCountry(country) {
+      axios.get("/getallStatesBycountry/" + country).then((res) => {
+        this.listStates = res.data.message;
+      });
+    },
+    getAllCitiesByState(country, state) {
+      axios.get("/getAllCitiesByState/" + country + "/" + state).then((res) => {
+        this.listCities = res.data.message;
+      });
+    },
+    changeOrigin(city) {
+      this.latitudeOrigin = city.latitude;
+      this.longitudeOrigin = city.longitude;
+      this.totalDistance = this.calcCrow(
+        this.latitudeOrigin,
+        this.longitudeOrigin,
+        41.3879,
+        2.16992
+      ).toFixed(3);
+    },
+    changeCountry(country) {
+      this.getAllStatesByCountry(country);
+    },
+    changeState(country, state) {
+      this.getAllCitiesByState(country, state);
+    },
+    calcCrow(latitude1, longitude1, latitude2, longitude2) {
+      var R = 6371; // km
+      var dLat = this.toRad(latitude2 - latitude1);
+      var dLon = this.toRad(longitude2 - longitude1);
+      var lat1 = this.toRad(latitude1);
+      var lat2 = this.toRad(latitude2);
+
+      var a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.sin(dLon / 2) *
+          Math.sin(dLon / 2) *
+          Math.cos(lat1) *
+          Math.cos(lat2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      var d = R * c;
+      return d;
+    },
+    toRad(Value) {
+      return (Value * Math.PI) / 180;
+    },
+
     changeFoodType(typeFood) {
       this.getAllFoodsByTypeProd(typeFood);
     },
@@ -987,47 +1016,27 @@ export default {
       if (
         this.productName == "" ||
         this.productDescription == "" ||
-        this.productOrigin == "" ||
+        this.city == "" ||
         this.productType == "" ||
-        this.productQuantity == ""
+        this.productQuantity == "" ||
+        this.Electricity == "" ||
+        this.Water == "" ||
+        this.isRenewal == null
       )
-        this.mensajeGeneralInfo = "Todos los campos son obligatorios";
+        this.mensajeGeneralInfo =
+          "Todos los campos marcados con ' * ' son obligatorios";
       else this.mensajeGeneralInfo = "";
     },
-    NextStep1() {
-      this.checkGeneralInfo();
-      if (this.mensajeGeneralInfo == "") {
-        this.isDisabled = true;
-        this.disabledTab2 = false;
-        this.step = this.step + 1;
+    checkDistance() {
+      var distanceTransport = this.transportInstances;
+      var auxDistance = 0;
+      for (var i = 0; i < distanceTransport.length; ++i) {
+        auxDistance = auxDistance + parseInt(distanceTransport[i].distance);
       }
-    },
-    EditStep1() {
-      this.isDisabled = false;
-    },
-    NextStep2() {
-      this.checkProcurementInfo();
-      if (this.mensajeProcurement == "") {
-        this.isDisabledProcurement = true;
-        this.disabledTab3 = false;
-        this.step = this.step + 1;
-      }
-    },
-    EditStep2() {
-      this.isDisabledProcurement = false;
-    },
-    NextStep3() {
-      this.isDisabledTransport = true;
-      this.disabledTab4 = false;
-      this.step = this.step + 1;
-      this.mensajeTransport = "";
-    },
-    EditStep3() {
-      this.isDisabledTransport = false;
-    },
-    NextStep4() {
-      this.step = this.step + 1;
-      this.disabledTab5 = false;
+      if (auxDistance < this.totalDistance) {
+        this.mensajeDistancias =
+          "La distancia de los transportes añadidos debe ser mayor o igual a la distancia entre la ciudades origen y destino.";
+      } else this.mensajeDistancias = "";
     },
     checkProcurementInfo() {
       if (this.Water == "" || this.Electricity == "")
@@ -1041,12 +1050,13 @@ export default {
         this.distance == ""
       )
         this.mensajeTransport =
-          "Todos los campos del transporte son obligatorios";
+          "Todos los campos del Transportes son obligatorios";
       else if (
         this.capacity >= this.maxCapacity ||
         this.distance >= this.maxDistance
       )
         this.mensajeTransport = "Comprueba los valores máximos";
+      else this.mensajeTransport = "";
     },
     checkInfoRecipient() {
       if (this.selectedRecipient == "" || this.dimensionsRecipient == "")
@@ -1074,9 +1084,10 @@ export default {
         this.listFoods = res.data.message;
       });
     },
-    deleteTransport(index) {
+    deleteTransport(index, item) {
       this.rowData.splice(index, 1);
       this.transportInstances.splice(index, 1);
+      axios.delete("/deleteTransportInstance/" + item.id);
     },
     getAllTransports() {
       axios.get("/getAllTransports").then((res) => {
@@ -1133,6 +1144,25 @@ export default {
             this.mensaje = "Alimento creado";
             this.name = "";
             this.foodInstances.push(newFoodInstance);
+          },
+          (err) => {
+            this.error = err.response.data.error;
+          }
+        );
+    },
+    getFoodInstances(productId) {
+      axios
+        .get("/getFoodInstance", {
+          headers: {
+            authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then(
+          (res) => {
+            this.error = "";
+            this.mensaje = "Alimento creado";
+            this.name = "";
+            this.foodInstances = res.data.message;
           },
           (err) => {
             this.error = err.response.data.error;
@@ -1214,7 +1244,7 @@ export default {
         .then(
           (res) => {
             this.error = "";
-            this.mensaje = "Producto creado";
+            this.mensaje = "Envase creado";
             this.name = "";
             this.recipientInstances.push(newRecipientInstance);
           },
@@ -1224,43 +1254,75 @@ export default {
         );
     },
     addNewProduct() {
-      //const formData = new FormData();
-      //formData.append('image', this.image,this.image.name);
-      //console.log(formData);
-      let newProduct = {
-        //General info
-        name: this.productName,
-        description: this.productDescription,
-        origin: this.productOrigin,
-        quantity: this.productQuantity,
-        type: this.productType.name, //o Id?
-        image: '',
-        //Procurement
-        water: this.Water,
-        electricity: this.Electricity,
-        //crear las FoodInstances
-        foods: this.foodInstances,
+      this.checkGeneralInfo();
+      this.checkDistance();
+      if (this.mensajeGeneralInfo == "" && this.mensajeDistancias == "") {
+        var imageName = "";
+        if (this.image != null) imageName = this.image.name;
+        //if(this.isRenewal == "1") this.Electricity = 0;
+        let newProduct = {
+          //General info
+          name: this.productName,
+          description: this.productDescription,
+          originCountry: this.country.code,
+          originState: this.state.iso,
+          originCity: this.city.name,
+          totalDistance: this.totalDistance,
+          latitudeOrigin: this.latitudeOrigin,
+          longitudeOrigin: this.longitudeOrigin,
+          quantity: this.productQuantity,
+          type: this.productType, //o Id?
+          image: imageName,
+          //Procurement
+          water: this.Water,
+          electricity: this.Electricity,
+          isRenewal: this.isRenewal,
+          //crear las FoodInstances
+          foods: this.foodInstances,
 
-        //crear las TransportInstances
-        transports: this.transportInstances,
-        //crear las WasteInstances
-        recipients: this.recipientInstances,
-      };
-      axios
-        .post("/addProduct", newProduct, {
-          headers: { authorization: "Bearer " + localStorage.getItem("token")},
-        })
-        .then(
-          (res) => {
-            console.log(res);
-            this.error = "";
-            this.mensaje = "Producto creado";
-            this.$router.push("/productlist");
-          },
-          (err) => {
-            this.error = err.response.data.error;
-          }
-        );
+          //crear las TransportInstances
+          transports: this.transportInstances,
+          //crear las WasteInstances
+          recipients: this.recipientInstances,
+        };
+        if (this.$route.query.id != null) {
+          if(newProduct.image == null) newProduct.image = this.image
+          //sobreescribir producto
+          axios
+            .post("/editProduct/" + this.$route.query.id, newProduct, {
+              headers: {
+                authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            })
+            .then(
+              (res) => {
+                this.error = "";
+                this.mensaje = "Producto creado";
+                this.$router.push("/productlist");
+              },
+              (err) => {
+                this.error = err.response.data.error;
+              }
+            );
+        } else {
+          axios
+            .post("/addProduct", newProduct, {
+              headers: {
+                authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            })
+            .then(
+              (res) => {
+                this.error = "";
+                this.mensaje = "Producto creado";
+                this.$router.push("/productlist");
+              },
+              (err) => {
+                this.error = err.response.data.error;
+              }
+            );
+        }
+      }
     },
   },
 };
@@ -1268,5 +1330,8 @@ export default {
 <style scoped>
 .input--error {
   border-color: red;
+}
+* {
+  font-family: "Roboto";
 }
 </style>

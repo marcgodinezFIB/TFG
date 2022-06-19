@@ -13,8 +13,8 @@ function addFavoriteProduct(req, res) {
         if (!user) return res.status(404).send({ message: "no existe usuario" })
         if (user.role == "EMPRESA") {
             var favoriteProduct = new FavoriteProduct({
-                user: user,
-                product: req.body.product
+                user: user._id,
+                product: req.params.prod
             })
             favoriteProduct.save();
             return res.status(201).send({ message: "Se ha añadido correctamente el producto favorito" })
@@ -23,11 +23,12 @@ function addFavoriteProduct(req, res) {
 }
 
 function removeFavoriteProduct(req, res) {
+
     User.findById(req.user, (err, user) => {
         if (err) return res.status(500).send({ message: err })
         if (!user) return res.status(404).send({ message: "no existe usuario" })
         if (user.role) {
-            FavoriteProduct.find({ user: req.params.user, product: req.params.product }, (err, not) => {
+            FavoriteProduct.findOneAndDelete({ user: req.user, product: req.params.prod }, (err, not) => {
                 if (err) res.status(500).send(`${err}`)
                 else if (not) return res.status(201).send({ message: "Se ha eliminado correctamente el producto favorito" })
             })
@@ -51,7 +52,6 @@ async function getAllFavoriteProducts(req, res) {
         if (favprod){
             var auxList = [];
             getAllProductsAux(favprod).then(function(response){
-                console.log(response)
                 auxList = response;
                 return res.status(200).send({message : auxList});
             })
